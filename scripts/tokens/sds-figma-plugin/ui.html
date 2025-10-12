@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SDS Component Scanner</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+      margin: 0; 
+      padding: 0;
+      background: #f8f9fa;
+    }
+    
+    .header { 
+      background: linear-gradient(135deg, #e75715, #d64910); 
+      color: white; 
+      padding: 20px; 
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 { 
+      margin: 0; 
+      font-size: 18px; 
+      font-weight: 600;
+    }
+    
+    .header p { 
+      margin: 5px 0 0 0; 
+      opacity: 0.9; 
+      font-size: 12px;
+    }
+    
+    .container { 
+      padding: 20px; 
+    }
+    
+    .scan-section {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #e1e4e8;
+    }
+    
+    .scan-button { 
+      background: #0366d6; 
+      color: white; 
+      border: none; 
+      padding: 12px 24px; 
+      border-radius: 6px; 
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .scan-button:hover { 
+      background: #0256c4; 
+    }
+    
+    .scan-button:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+    }
+    
+    .results {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e1e4e8;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .results.show { 
+      display: block; 
+    }
+    
+    .result-header {
+      background: #f6f8fa;
+      padding: 15px 20px;
+      border-bottom: 1px solid #e1e4e8;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .detected-components {
+      padding: 20px;
+    }
+    
+    .component-item {
+      background: #f8f9fa;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .component-name {
+      font-weight: 600;
+      color: #e75715;
+      margin-bottom: 8px;
+    }
+    
+    .component-details {
+      font-size: 12px;
+      color: #586069;
+      margin-bottom: 10px;
+    }
+    
+    .component-path {
+      font-family: 'SF Mono', Consolas, monospace;
+      background: #f1f3f4;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+    
+    .generate-button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .generate-button:hover {
+      background: #218838;
+    }
+    
+    .code-output {
+      background: #f6f8fa;
+      border: 1px solid #e1e4e8;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 6px;
+      display: none;
+    }
+    
+    .code-output.show {
+      display: block;
+    }
+    
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .code-content {
+      background: #ffffff;
+      border: 1px solid #e1e4e8;
+      padding: 15px;
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 11px;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+      border-radius: 4px;
+    }
+    
+    .copy-button {
+      background: #6f42c1;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    
+    .copy-button:hover {
+      background: #5a2d91;
+    }
+    
+    .status {
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-size: 12px;
+      display: none;
+    }
+    
+    .status.show { display: block; }
+    .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    
+    .no-selection {
+      text-align: center;
+      padding: 40px 20px;
+      color: #586069;
+    }
+    
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎯 SDS Component Scanner</h1>
+    <p>Scan Figma selections and map to your actual React Native components</p>
+  </div>
+
+  <div class="container">
+    <div class="scan-section">
+      <h3 style="margin-top: 0;">📱 Quick Scan</h3>
+      <p style="color: #586069; font-size: 12px; margin-bottom: 15px;">
+        Select a form, header, button, or any component in Figma, then click scan to detect components and generate code.
+      </p>
+      
+      <button id="scanBtn" class="scan-button" onclick="scanSelection()">
+        <span id="scanText">🔍 Scan Figma Selection</span>
+      </button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div id="results" class="results">
+      <div class="result-header">
+        <span>🎯 Detected Components</span>
+        <span id="componentCount">0 components</span>
+      </div>
+      <div id="detectedComponents" class="detected-components"></div>
+    </div>
+
+    <div id="codeOutput" class="code-output">
+      <div class="code-header">
+        <strong>📋 Generated Code</strong>
+        <button class="copy-button" onclick="copyCode()">Copy</button>
+      </div>
+      <div id="codeContent" class="code-content"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentAnalysis = null;
+    let generatedCode = '';
+
+    // Send message to plugin backend
+    function scanSelection() {
+      const btn = document.getElementById('scanBtn');
+      const text = document.getElementById('scanText');
+      
+      btn.disabled = true;
+      text.innerHTML = '<div class="loading"><div class="spinner"></div>Scanning...</div>';
+      
+      // Hide previous results
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('codeOutput').classList.remove('show');
+      
+      // Send scan message to plugin
+      parent.postMessage({ 
+        pluginMessage: { type: 'scan-selection' } 
+      }, '*');
+    }
+
+    function generateCode(componentData) {
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'generate-code',
+          componentData: componentData
+        } 
+      }, '*');
+    }
+
+    function copyCode() {
+      if (generatedCode) {
+        navigator.clipboard.writeText(generatedCode).then(() => {
+          showStatus('📋 Code copied to clipboard!', 'success');
+        });
+      }
+    }
+
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status ${type} show`;
+      
+      setTimeout(() => {
+        status.classList.remove('show');
+      }, 3000);
+    }
+
+    function resetScanButton() {
+      const btn = document.getElementById('scanBtn');
+      const text = document.getElementById('scanText');
+      
+      btn.disabled = false;
+      text.textContent = '🔍 Scan Figma Selection';
+    }
+
+    function displayResults(results) {
+      const resultsDiv = document.getElementById('results');
+      const componentsDiv = document.getElementById('detectedComponents');
+      const countSpan = document.getElementById('componentCount');
+      
+      if (!results || results.length === 0) {
+        showStatus('No components detected. Try selecting a form, header, or button.', 'error');
+        resetScanButton();
+        return;
+      }
+
+      currentAnalysis = results[0]; // Use first result for demo
+      
+      // Count detected components
+      const totalComponents = results.reduce((sum, result) => 
+        sum + result.detectedComponents.length, 0
+      );
+      
+      countSpan.textContent = `${totalComponents} component${totalComponents !== 1 ? 's' : ''}`;
+      
+      // Display components
+      componentsDiv.innerHTML = '';
+      
+      results.forEach((result, index) => {
+        if (result.detectedComponents.length > 0) {
+          result.detectedComponents.forEach(comp => {
+            const item = document.createElement('div');
+            item.className = 'component-item';
+            item.innerHTML = `
+              <div class="component-name">✅ ${comp.component}</div>
+              <div class="component-details">
+                Type: ${comp.type} | Source: ${result.name}
+              </div>
+              <div class="component-path">${comp.path}</div>
+              <button class="generate-button" onclick="generateCode(currentAnalysis)">
+                🚀 Generate Code
+              </button>
+            `;
+            componentsDiv.appendChild(item);
+          });
+        } else {
+          const item = document.createElement('div');
+          item.className = 'component-item';
+          item.innerHTML = `
+            <div class="component-name">❓ ${result.name}</div>
+            <div class="component-details">
+              No component mapping found. Add to COMPONENT_PATTERNS.
+            </div>
+          `;
+          componentsDiv.appendChild(item);
+        }
+      });
+      
+      resultsDiv.classList.add('show');
+      resetScanButton();
+      
+      showStatus(`✅ Found ${totalComponents} mappable components!`, 'success');
+    }
+
+    function displayCode(code) {
+      const codeDiv = document.getElementById('codeOutput');
+      const codeContent = document.getElementById('codeContent');
+      
+      generatedCode = code;
+      codeContent.textContent = code;
+      codeDiv.classList.add('show');
+      
+      showStatus('🎯 Code generated! Ready to copy and use.', 'success');
+    }
+
+    // Listen for messages from plugin
+    window.onmessage = (event) => {
+      const { type, results, code, message } = event.data.pluginMessage || {};
+      
+      switch (type) {
+        case 'no-selection':
+          showStatus(message, 'error');
+          resetScanButton();
+          break;
+          
+        case 'analysis-complete':
+          displayResults(results);
+          break;
+          
+        case 'code-generated':
+          displayCode(code);
+          break;
+          
+        default:
+          console.log('Unknown message type:', type);
+      }
+    };
+
+    // Auto-focus on load
+    window.addEventListener('load', () => {
+      showStatus('👋 Ready! Select components in Figma and click scan.', 'info');
+    });
+  </script>
+</body>
+</html>
