@@ -271,7 +271,7 @@
     "fontStyle": "normal"
   },
   {
-    "key": "41bfc984ba768095400f8a022edd454968162c94",
+    "key": "e75647b10a1b91d00241f2919f083ea3554dcc2d",
     "name": "Drop Shadow/300",
     "styleType": "EFFECT",
     "remote": false,
@@ -361,7 +361,7 @@
     ]
   },
   {
-    "key": "2d01cd4dd5f75236392138f6c1e10e313e217abf",
+    "key": "889b7ec27fa73799d73d4f4aa67037b98f644211",
     "name": "Drop Shadow/200",
     "styleType": "EFFECT",
     "remote": false,
@@ -449,7 +449,7 @@
     ]
   },
   {
-    "key": "844cb38efcc62bad149e9f8e82b049aafa7a9f14",
+    "key": "67c60884f6b5796d99fdf94866b533e61d134eff",
     "name": "Drop Shadow/100",
     "styleType": "EFFECT",
     "remote": false,
@@ -498,7 +498,7 @@
     ]
   },
   {
-    "key": "22a5720258ee85f4db18164a837c72af9bf36211",
+    "key": "458a8518047b7ebc427f744a0c7c4416cf35873b",
     "name": "Drop Shadow/400",
     "styleType": "EFFECT",
     "remote": false,
@@ -588,7 +588,7 @@
     ]
   },
   {
-    "key": "d61d50a6c230a64bafa23f076ca12209d159d3f1",
+    "key": "36eb91d820ed83c298534014e60b192db266e459",
     "name": "Drop Shadow/500",
     "styleType": "EFFECT",
     "remote": false,
@@ -678,7 +678,7 @@
     ]
   },
   {
-    "key": "a3f45659b320637d1041a0719886b10bd4ca4b74",
+    "key": "02c7eaf1bb3ea77b83814c0442c5ecea5d873216",
     "name": "Drop Shadow/600",
     "styleType": "EFFECT",
     "remote": false,
@@ -728,7 +728,7 @@
     ]
   },
   {
-    "key": "a3a68a1e5d26ac05d0691dbc3a1524483a6fe547",
+    "key": "fdcfa50ce179f93f4de6d824f1b6cc95265e3f82",
     "name": "Inner Shadow/100",
     "styleType": "EFFECT",
     "remote": false,
@@ -755,17 +755,9 @@
             "type": "VARIABLE_ALIAS",
             "id": "VariableID:228:6769"
           },
-          "spread": {
-            "type": "VARIABLE_ALIAS",
-            "id": "VariableID:9:11280"
-          },
           "color": {
             "type": "VARIABLE_ALIAS",
             "id": "VariableID:9:11234"
-          },
-          "offsetX": {
-            "type": "VARIABLE_ALIAS",
-            "id": "VariableID:9:11280"
           },
           "offsetY": {
             "type": "VARIABLE_ALIAS",
@@ -776,7 +768,7 @@
     ]
   },
   {
-    "key": "412d66d8d6316d332a7543a60600bf2ef9bd2dfb",
+    "key": "2ba4578f5adcc913d565cf719d85fdfddd9c0d87",
     "name": "Inner Shadow/200",
     "styleType": "EFFECT",
     "remote": false,
@@ -824,7 +816,7 @@
     ]
   },
   {
-    "key": "7d9c37ac4f1b795a0d5e046de7add2212537c502",
+    "key": "33cc68e4e462ab3486a3fb03d85c9b3366e27c2c",
     "name": "Inner Shadow/300",
     "styleType": "EFFECT",
     "remote": false,
@@ -873,7 +865,7 @@
     ]
   },
   {
-    "key": "af59b9b0607b46632a5e162cde037982ae6875f2",
+    "key": "10a21f1dc9c40266cbd3d9459c6393e375ca0faf",
     "name": "Inner Shadow/400",
     "styleType": "EFFECT",
     "remote": false,
@@ -922,7 +914,7 @@
     ]
   },
   {
-    "key": "83f59232317bcbb4984fec37cc6f2599fb13cb2d",
+    "key": "f68034dc5f2aa52ba3eefe5f26f8de8cc999ada2",
     "name": "Inner Shadow/500",
     "styleType": "EFFECT",
     "remote": false,
@@ -971,7 +963,7 @@
     ]
   },
   {
-    "key": "8e7987f1bc0e54821a58cb5ef97d465c63a0c7de",
+    "key": "f90d38dc9f8601bdf7c2cecc563a8e9ba7414d57",
     "name": "Inner Shadow/600",
     "styleType": "EFFECT",
     "remote": false,
@@ -1020,7 +1012,7 @@
     ]
   },
   {
-    "key": "51341f0de91736132fa1aabef390bda0d403dbce",
+    "key": "60654307c614a1e81f4cea176208c8663b7a74d0",
     "name": "Blur/Overlay",
     "styleType": "EFFECT",
     "remote": false,
@@ -1041,7 +1033,7 @@
     ]
   },
   {
-    "key": "a9e3e977b3a5f3d39c60df9268bcfcf0465fdb96",
+    "key": "0bd8d2a75fd86b02746425522a12468bd422a523",
     "name": "Blur/Layer",
     "styleType": "EFFECT",
     "remote": false,
@@ -1062,7 +1054,7 @@
     ]
   },
   {
-    "key": "c27c483297e637a9136a29b09a92360a84ba293d",
+    "key": "40b4bf049d06963d561187e6ea9e15c3ba8532c2",
     "name": "Blur/Glass",
     "styleType": "EFFECT",
     "remote": false,
@@ -1083,7 +1075,7 @@
     ]
   },
   {
-    "key": "b6cb6cc3526049c20430b096b6ed65c5eba1c246",
+    "key": "01f7a8d42c3e82f0b85416093494ba542a4dc57d",
     "name": "Image Placeholder",
     "styleType": "FILL",
     "remote": false,

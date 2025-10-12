@@ -10,7 +10,12 @@ const meta: Meta<typeof FormBox> = {
 export default meta;
 
 export const StoryFormBox: StoryObj<typeof FormBox> = {
+  args: {
+    singleLine: false,
+  },
+
   name: "Forms",
+
   render: (args) => (
     <FormBox {...args} onSubmit={() => {}}>
       <InputField label="Email" />

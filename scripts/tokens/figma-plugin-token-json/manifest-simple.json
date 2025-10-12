@@ -1,0 +1,10 @@
+{
+  "name": "SDS - Simple Variables Export",
+  "id": "1225498390710809904",
+  "api": "1.0.0",
+  "editorType": ["figma"],
+  "permissions": [],
+  "main": "code-simple.js",
+  "networkAccess": { "allowedDomains": ["none"] },
+  "ui": "ui.html"
+}

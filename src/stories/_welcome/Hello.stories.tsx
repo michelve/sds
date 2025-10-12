@@ -23,11 +23,11 @@ export const StoryHello: StoryObj<{}> = {
         <FlexItem size="major">
           <Flex direction="column" gap="300">
             <Logo />
-            <TextHeading>Figma Simple Design System</TextHeading>
+            <TextHeading>Simple Design System</TextHeading>
             <Text>
               Simple Design System (SDS) is a base design system that shows how
-              Figma’s Variables, Styles, Components, and Code Connect can be
-              used alongside a React and CSS codebase to form a complete picture
+              Variables, Styles, Components, and Code Connect can be used
+              alongside a React and CSS codebase to form a complete picture
               of a responsive web design system.
             </Text>
 
@@ -46,19 +46,6 @@ export const StoryHello: StoryObj<{}> = {
               you'll find tools inside this codebase and Figma file to steer you
               in the right direction.
             </Text>
-
-            <TextLinkList density="tight">
-              <TextListItem>
-                <TextLink href="https://github.com/figma/sds">
-                  GitHub SDS Repo
-                </TextLink>
-              </TextListItem>
-              <TextListItem>
-                <TextLink href="https://www.figma.com/community/file/1380235722331273046">
-                  Figma Community File
-                </TextLink>
-              </TextListItem>
-            </TextLinkList>
           </Flex>
         </FlexItem>
       </Flex>

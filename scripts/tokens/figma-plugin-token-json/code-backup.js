@@ -1,5 +1,5 @@
 const KEY_PREFIX_COLLECTION = `@`;
-const NAMESPACE = "com.figma.sds";
+const NAMESPACE = "org.sds";
 
 exportToJSON();
 
@@ -182,75 +182,66 @@ function sanitizeName(name) {
     .toLowerCase();
 }
 
-function rgbToHex(color) {
-  const toHex = function(value) {
+function rgbToHex({ r, g, b, a }) {
+  const toHex = (value) => {
     const hex = Math.round(value * 255).toString(16);
     return hex.length === 1 ? "0" + hex : hex;
   };
 
-  const hex = [toHex(color.r), toHex(color.g), toHex(color.b)];
-  if (color.a !== 1) {
-    hex.push(toHex(color.a));
+  const hex = [toHex(r), toHex(g), toHex(b)];
+  if (a !== 1) {
+    hex.push(toHex(a));
   }
   return `#${hex.join("")}`;
 }
 
-function RGBAToHexA(rgba, forceRemoveAlpha) {
-  if (forceRemoveAlpha === undefined) {
-    forceRemoveAlpha = false;
-  }
+function RGBAToHexA(rgba, forceRemoveAlpha = false) {
   return (
     "#" +
     rgba
       .replace(/^rgba?\(|\s+|\)$/g, "") // Get's rgba / rgb string values
       .split(",") // splits them at ","
-      .filter(function(string, index) { return !forceRemoveAlpha || index !== 3; })
-      .map(function(string) { return parseFloat(string); }) // Converts them to numbers
-      .map(function(number, index) { return index === 3 ? Math.round(number * 255) : number; }) // Converts alpha to 255 number
-      .map(function(number) { return number.toString(16); }) // Converts numbers to hex
-      .map(function(string) { return string.length === 1 ? "0" + string : string; }) // Adds 0 when length of one number is 1
+      .filter((string, index) => !forceRemoveAlpha || index !== 3)
+      .map((string) => parseFloat(string)) // Converts them to numbers
+      .map((number, index) => (index === 3 ? Math.round(number * 255) : number)) // Converts alpha to 255 number
+      .map((number) => number.toString(16)) // Converts numbers to hex
+      .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
       .join("")
   ); // Puts the array to togehter to a string
 }
 
-function colorToHex(color) {
+function colorToHex({ r, g, b, a }) {
   return RGBAToHexA(
-    `rgba(${Math.round(color.r * 255)},${Math.round(color.g * 255)},${Math.round(color.b * 255)}, ${color.a})`,
+    `rgba(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)}, ${a})`,
   );
 }
 
 async function getEffects() {
   const payload = [];
   (await figma.getLocalEffectStylesAsync()).forEach(
-    function(effectStyle) {
-      const type = effectStyle.type;
-      const name = effectStyle.name;
-      const effects = effectStyle.effects;
+    ({ type, name, effects }) => {
       const newEffects = effects
-        .filter(function(a) { return a.visible; })
-        .map(function(effect) {
+        .filter((a) => a.visible)
+        .map((effect) => {
           const variables = {};
           for (let property in effect.boundVariables) {
             variables[property] = figma.variables.getVariableById(
               effect.boundVariables[property].id,
             ).name;
           }
-          const hex = effect.color ? colorToHex(effect.color) : null;
+          const hex = colorToHex(effect.color);
           const newEffect = Object.assign({}, effect);
           newEffect.hex = hex;
           newEffect.variables = variables;
           return newEffect;
         });
-      payload.push(JSON.stringify({ type: type, name: name, effects: newEffects }));
+      payload.push(JSON.stringify({ type, name, effects: newEffects }));
     },
   );
-  (await figma.getLocalPaintStylesAsync()).forEach(function(paintStyle) {
-    const type = paintStyle.type;
-    const name = paintStyle.name;
-    const paints = paintStyle.paints;
+  (await figma.getLocalPaintStylesAsync()).forEach(({ type, name, paints }) => {
     const newPaints = paints
-      .filter(function(a) { return a.visible; })
-      .map(function(paint) {
+      .filter((a) => a.visible)
+      .map((paint) => {
         const variables = {};
         for (let property in paint.boundVariables) {
           variables[property] = figma.variables.getVariableById(
@@ -261,26 +252,26 @@ async function getEffects() {
         newPaint.variables = variables;
         return newPaint;
       });
-    payload.push(JSON.stringify({ type: type, name: name, paints: newPaints }));
+    payload.push(JSON.stringify({ type, name, paints: newPaints }));
   });
   (await figma.getLocalTextStylesAsync()).forEach(
-    function(textStyle) {
-      const type = textStyle.type;
-      const name = textStyle.name;
-      const fontSize = textStyle.fontSize;
-      const textDecoration = textStyle.textDecoration;
-      const fontName = textStyle.fontName;
-      const letterSpacing = textStyle.letterSpacing;
-      const lineHeight = textStyle.lineHeight;
-      const leadingTrim = textStyle.leadingTrim;
-      const paragraphIndent = textStyle.paragraphIndent;
-      const paragraphSpacing = textStyle.paragraphSpacing;
-      const listSpacing = textStyle.listSpacing;
-      const handingPunctiation = textStyle.handingPunctiation;
-      const handlingList = textStyle.handlingList;
-      const textCase = textStyle.textCase;
-      const boundVariables = textStyle.boundVariables;
-      
+    ({
+      type,
+      name,
+      fontSize,
+      textDecoration,
+      fontName,
+      letterSpacing,
+      lineHeight,
+      leadingTrim,
+      paragraphIndent,
+      paragraphSpacing,
+      listSpacing,
+      handingPunctiation,
+      handlingList,
+      textCase,
+      boundVariables,
+    }) => {
       const variables = {};
       for (let property in boundVariables) {
         variables[property] = figma.variables.getVariableById(
@@ -289,22 +280,22 @@ async function getEffects() {
       }
       payload.push(
         JSON.stringify({
-          type: type,
-          name: name,
-          fontSize: fontSize,
-          textDecoration: textDecoration,
-          fontName: fontName,
-          letterSpacing: letterSpacing,
-          lineHeight: lineHeight,
-          leadingTrim: leadingTrim,
-          paragraphIndent: paragraphIndent,
-          paragraphSpacing: paragraphSpacing,
-          listSpacing: listSpacing,
-          handingPunctiation: handingPunctiation,
-          handlingList: handlingList,
-          textCase: textCase,
-          boundVariables: boundVariables,
-          variables: variables,
+          type,
+          name,
+          fontSize,
+          textDecoration,
+          fontName,
+          letterSpacing,
+          lineHeight,
+          leadingTrim,
+          paragraphIndent,
+          paragraphSpacing,
+          listSpacing,
+          handingPunctiation,
+          handlingList,
+          textCase,
+          boundVariables,
+          variables,
         }),
       );
     },
