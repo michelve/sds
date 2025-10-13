@@ -1,214 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SDS Component Scanner (Modular)</title>
-  
-  <!-- Load all modules in the correct order -->
-  <script src="modules/config.js"></script>
-  <script src="modules/variables.js"></script>
-  <script src="modules/codeConnect.js"></script>
-  <script src="modules/components.js"></script>
-  <script src="modules/codeGen.js"></script>
-  <script src="modules/devMode.js"></script>
-  
+  <title>SDS Code Generator</title>
+  <meta charset="utf-8">
   <style>
-    * { box-sizing: border-box; }
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-      margin: 0; 
-      padding: 0;
-      background: #f8f9fa;
+    * {
+      box-sizing: border-box;
     }
     
-    .header { 
-      background: linear-gradient(135deg, #e75715, #d64910); 
-      color: white; 
-      padding: 20px; 
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .header h1 { 
-      margin: 0; 
-      font-size: 18px; 
-      font-weight: 600;
-    }
-    
-    .header p { 
-      margin: 5px 0 0 0; 
-      opacity: 0.9; 
+    body {
+      font-family: var(--figma-font-family, 'Inter', sans-serif);
       font-size: 12px;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      background: var(--figma-color-bg, #ffffff);
+      color: var(--figma-color-text, #000000);
+      min-height: 100vh;
     }
     
-    .container { 
-      padding: 20px; 
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 16px;
     }
     
-    .scan-section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
+    .header {
+      text-align: center;
       margin-bottom: 20px;
-      border: 1px solid #e1e4e8;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--figma-color-border, #e1e5e9);
     }
     
-    .scan-button { 
-      background: #0366d6; 
-      color: white; 
-      border: none; 
-      padding: 12px 24px; 
-      border-radius: 6px; 
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
       font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      font-size: 14px;
+      color: var(--figma-color-text, #000000);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
     
-    .scan-button:hover { 
-      background: #0256c4; 
+    .header p {
+      margin: 0;
+      color: var(--figma-color-text-secondary, #666666);
+      font-size: 11px;
     }
     
-    .scan-button:disabled {
-      background: #6c757d;
+    .section {
+      margin-bottom: 16px;
+      padding: 16px;
+      background: var(--figma-color-bg-secondary, #f9f9f9);
+      border-radius: 8px;
+      border: 1px solid var(--figma-color-border, #e1e5e9);
+    }
+    
+    .section h3 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--figma-color-text, #000000);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1px solid var(--figma-color-border, #e1e5e9);
+      border-radius: 6px;
+      background: var(--figma-color-bg, #ffffff);
+      color: var(--figma-color-text, #000000);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      gap: 6px;
+      transition: all 0.2s;
+      width: 100%;
+      min-height: 36px;
+    }
+    
+    .button:hover {
+      background: var(--figma-color-bg-hover, #f0f0f0);
+    }
+    
+    .button:active {
+      transform: scale(0.98);
+    }
+    
+    .button.primary {
+      background: var(--figma-color-bg-brand, #0066cc);
+      color: var(--figma-color-text-onbrand, #ffffff);
+      border-color: var(--figma-color-bg-brand, #0066cc);
+    }
+    
+    .button.primary:hover {
+      background: var(--figma-color-bg-brand-hover, #0056b3);
+    }
+    
+    .button:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
     }
     
     .results {
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #e1e4e8;
-      margin-top: 20px;
-      display: none;
+      margin-top: 16px;
     }
     
-    .results.show { 
-      display: block; 
+    .component-list {
+      margin-bottom: 16px;
     }
     
-    .result-header {
-      background: #f6f8fa;
-      padding: 15px 20px;
-      border-bottom: 1px solid #e1e4e8;
-      font-weight: 600;
+    .component-item {
+      background: var(--figma-color-bg, #ffffff);
+      border: 1px solid var(--figma-color-border, #e1e5e9);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     
-    .detected-components {
-      padding: 20px;
-    }
-    
-    .component-item {
-      background: #f8f9fa;
-      border: 1px solid #e1e4e8;
-      border-radius: 6px;
-      padding: 15px;
-      margin-bottom: 15px;
+    .component-info {
+      flex: 1;
     }
     
     .component-name {
       font-weight: 600;
-      color: #e75715;
-      margin-bottom: 8px;
+      color: var(--figma-color-text, #000000);
+      margin-bottom: 4px;
     }
     
     .component-details {
-      font-size: 12px;
-      color: #586069;
-      margin-bottom: 10px;
+      font-size: 10px;
+      color: var(--figma-color-text-secondary, #666666);
+      display: flex;
+      gap: 12px;
     }
     
     .component-path {
-      font-family: 'SF Mono', Consolas, monospace;
-      background: #f1f3f4;
-      padding: 4px 8px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 9px;
+      background: var(--figma-color-bg-secondary, #f9f9f9);
+      padding: 2px 6px;
       border-radius: 3px;
-      font-size: 11px;
     }
     
-    .generate-button {
+    .confidence-badge {
+      background: var(--figma-color-bg-brand, #0066cc);
+      color: var(--figma-color-text-onbrand, #ffffff);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 9px;
+      font-weight: 500;
+    }
+    
+    .confidence-badge.high {
       background: #28a745;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 12px;
-      cursor: pointer;
-      margin-top: 10px;
     }
     
-    .generate-button:hover {
-      background: #218838;
+    .confidence-badge.medium {
+      background: #ffc107;
+      color: #000;
     }
     
-    .code-output {
-      background: #f6f8fa;
-      border: 1px solid #e1e4e8;
-      padding: 20px;
-      margin-top: 20px;
+    .confidence-badge.low {
+      background: #dc3545;
+    }
+    
+    .code-section {
+      background: var(--figma-color-bg, #ffffff);
+      border: 1px solid var(--figma-color-border, #e1e5e9);
       border-radius: 6px;
-      display: none;
-    }
-    
-    .code-output.show {
-      display: block;
+      overflow: hidden;
     }
     
     .code-header {
+      background: var(--figma-color-bg-secondary, #f9f9f9);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--figma-color-border, #e1e5e9);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+    }
+    
+    .code-header h4 {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .code-actions {
+      display: flex;
+      gap: 8px;
     }
     
     .code-content {
-      background: #ffffff;
-      border: 1px solid #e1e4e8;
-      padding: 15px;
-      font-family: 'SF Mono', Consolas, monospace;
+      padding: 16px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 11px;
+      line-height: 1.4;
       white-space: pre-wrap;
+      word-wrap: break-word;
       max-height: 300px;
       overflow-y: auto;
-      border-radius: 4px;
-    }
-    
-    .copy-button {
-      background: #6f42c1;
-      color: white;
+      background: #f8f9fa;
       border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-    
-    .copy-button:hover {
-      background: #5a2d91;
+      outline: none;
+      resize: none;
+      width: 100%;
     }
     
     .status {
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 4px;
-      font-size: 12px;
-      display: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      margin: 8px 0;
     }
     
-    .status.show { display: block; }
-    .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
     
-    .no-selection {
-      text-align: center;
-      padding: 40px 20px;
-      color: #586069;
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .status.info {
+      background: #cce7ff;
+      color: #004085;
+      border: 1px solid #b3d4fc;
+    }
+    
+    .status.warning {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .hidden {
+      display: none;
     }
     
     .loading {
@@ -221,8 +264,8 @@
     .spinner {
       width: 16px;
       height: 16px;
-      border: 2px solid #ffffff;
-      border-top: 2px solid transparent;
+      border: 2px solid var(--figma-color-border, #e1e5e9);
+      border-top: 2px solid var(--figma-color-bg-brand, #0066cc);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -231,196 +274,298 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
+    .selection-info {
+      background: var(--figma-color-bg-secondary, #f9f9f9);
+      border: 1px solid var(--figma-color-border, #e1e5e9);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: var(--figma-color-text-secondary, #666666);
+    }
+    
+    .stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--figma-color-text, #000000);
+    }
+    
+    .stat-label {
+      font-size: 10px;
+      color: var(--figma-color-text-secondary, #666666);
+    }
   </style>
 </head>
 <body>
-
-
   <div class="container">
-    <div class="scan-section">
-      <h3 style="margin-top: 0;">Quick Scan</h3>
-      <p style="color: #586069; font-size: 12px; margin-bottom: 15px;">
-        Select a form, header, button, or any component in Figma, then click scan to detect components and generate code.
-      </p>
-      
-      <button id="scanBtn" class="scan-button" onclick="scanSelection()">
-        <span id="scanText">Scan Figma Selection</span>
+    <div class="header">
+      <h1>
+        🎨 SDS Code Generator
+      </h1>
+      <p>Generate React code from SDS components using Code Connect</p>
+    </div>
+    
+    <div class="section">
+      <h3>🔍 Analysis</h3>
+      <div id="selectionInfo" class="selection-info hidden">
+        <div id="selectionText"></div>
+      </div>
+      <button id="analyzeBtn" class="button primary">
+        <span id="analyzeText">Analyze Selection</span>
       </button>
+      <div id="status" class="hidden"></div>
     </div>
-
-    <div id="status" class="status"></div>
-
-    <div id="results" class="results">
-      <div class="result-header">
-        <span>Detected Components</span>
-        <span id="componentCount">0 components</span>
+    
+    <div id="results" class="results hidden">
+      <div class="section">
+        <h3>📊 Results</h3>
+        <div id="stats" class="stats">
+          <div class="stat">
+            <div id="componentsCount" class="stat-value">0</div>
+            <div class="stat-label">Components</div>
+          </div>
+          <div class="stat">
+            <div id="confidenceAvg" class="stat-value">0%</div>
+            <div class="stat-label">Confidence</div>
+          </div>
+        </div>
+        
+        <div class="component-list">
+          <h4 style="margin: 0 0 8px 0; font-size: 12px;">Detected Components</h4>
+          <div id="detectionsList"></div>
+        </div>
       </div>
-      <div id="detectedComponents" class="detected-components"></div>
-    </div>
-
-    <div id="codeOutput" class="code-output">
-      <div class="code-header">
-        <strong>Generated Code</strong>
-        <button class="copy-button" onclick="copyCode()">Copy</button>
+      
+      <div class="code-section">
+        <div class="code-header">
+          <h4>📋 Generated Code</h4>
+          <div class="code-actions">
+            <button id="copyBtn" class="button" style="width: auto; min-height: 28px; padding: 4px 8px; font-size: 10px;">
+              📋 Copy
+            </button>
+            <button id="downloadBtn" class="button" style="width: auto; min-height: 28px; padding: 4px 8px; font-size: 10px;">
+              💾 Download
+            </button>
+          </div>
+        </div>
+        <textarea id="generatedCode" class="code-content" readonly></textarea>
       </div>
-      <div id="codeContent" class="code-content"></div>
     </div>
   </div>
 
   <script>
+    console.log('🎨 SDS Code Generator UI loaded');
+    
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const analyzeText = document.getElementById('analyzeText');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const statusEl = document.getElementById('status');
+    const resultsEl = document.getElementById('results');
+    const generatedCodeEl = document.getElementById('generatedCode');
+    const detectionsListEl = document.getElementById('detectionsList');
+    const selectionInfoEl = document.getElementById('selectionInfo');
+    const selectionTextEl = document.getElementById('selectionText');
+    const componentsCountEl = document.getElementById('componentsCount');
+    const confidenceAvgEl = document.getElementById('confidenceAvg');
+    
+    let currentCode = '';
     let currentAnalysis = null;
-    let generatedCode = '';
-
-    // Send message to plugin backend
-    function scanSelection() {
-      const btn = document.getElementById('scanBtn');
-      const text = document.getElementById('scanText');
+    
+    function showStatus(message, type = 'info') {
+      statusEl.textContent = message;
+      statusEl.className = `status ${type}`;
+      statusEl.classList.remove('hidden');
       
-      btn.disabled = true;
-      text.innerHTML = '<div class="loading"><div class="spinner"></div>Scanning...</div>';
-      
-      // Hide previous results
-      document.getElementById('results').classList.remove('show');
-      document.getElementById('codeOutput').classList.remove('show');
-      
-      // Send scan message to plugin
-      parent.postMessage({ 
-        pluginMessage: { type: 'scan-selection' } 
-      }, '*');
-    }
-
-    function generateCode(componentData) {
-      parent.postMessage({ 
-        pluginMessage: { 
-          type: 'generate-code',
-          componentData: componentData
-        } 
-      }, '*');
-    }
-
-    function copyCode() {
-      if (generatedCode) {
-        navigator.clipboard.writeText(generatedCode).then(() => {
-          showStatus('📋 Code copied to clipboard!', 'success');
-        });
+      if (type === 'success' || type === 'error') {
+        setTimeout(() => {
+          statusEl.classList.add('hidden');
+        }, 4000);
       }
     }
-
-    function showStatus(message, type) {
-      const status = document.getElementById('status');
-      status.textContent = message;
-      status.className = `status ${type} show`;
-      
-      setTimeout(() => {
-        status.classList.remove('show');
-      }, 3000);
+    
+    function showLoading() {
+      analyzeBtn.disabled = true;
+      analyzeText.innerHTML = '<div class="loading"><div class="spinner"></div>Analyzing...</div>';
     }
-
-    function resetScanButton() {
-      const btn = document.getElementById('scanBtn');
-      const text = document.getElementById('scanText');
-      
-      btn.disabled = false;
-      text.textContent = '🔍 Scan Figma Selection';
+    
+    function hideLoading() {
+      analyzeBtn.disabled = false;
+      analyzeText.textContent = 'Analyze Selection';
     }
-
-    function displayResults(results) {
-      const resultsDiv = document.getElementById('results');
-      const componentsDiv = document.getElementById('detectedComponents');
-      const countSpan = document.getElementById('componentCount');
-      
-      if (!results || results.length === 0) {
-        showStatus('No components detected. Try selecting a form, header, or button.', 'error');
-        resetScanButton();
-        return;
+    
+    function updateSelectionInfo(selection) {
+      if (selection && selection.length > 0) {
+        selectionTextEl.textContent = `${selection.length} item${selection.length !== 1 ? 's' : ''} selected`;
+        selectionInfoEl.classList.remove('hidden');
+      } else {
+        selectionInfoEl.classList.add('hidden');
       }
-
-      currentAnalysis = results[0]; // Use first result for demo
+    }
+    
+    function showResults(data) {
+      const { results, code } = data;
       
-      // Count detected components
+      currentCode = code;
+      currentAnalysis = data;
+      generatedCodeEl.value = code;
+      
+      // Update stats
       const totalComponents = results.reduce((sum, result) => 
-        sum + result.detectedComponents.length, 0
+        sum + (result.detectedComponents ? result.detectedComponents.length : 0), 0
       );
       
-      countSpan.textContent = `${totalComponents} component${totalComponents !== 1 ? 's' : ''}`;
+      const avgConfidence = results.reduce((sum, result) => {
+        if (!result.detectedComponents) return sum;
+        const resultAvg = result.detectedComponents.reduce((s, comp) => s + (comp.confidence || 0), 0) / result.detectedComponents.length;
+        return sum + resultAvg;
+      }, 0) / results.length;
       
-      // Display components
-      componentsDiv.innerHTML = '';
+      componentsCountEl.textContent = totalComponents;
+      confidenceAvgEl.textContent = Math.round(avgConfidence * 100) + '%';
       
-      results.forEach((result, index) => {
-        if (result.detectedComponents.length > 0) {
-          result.detectedComponents.forEach(comp => {
+      // Show detected components
+      detectionsListEl.innerHTML = '';
+      if (results && results.length > 0) {
+        results.forEach(result => {
+          if (result.detectedComponents && result.detectedComponents.length > 0) {
+            result.detectedComponents.forEach(comp => {
+              const item = document.createElement('div');
+              item.className = 'component-item';
+              
+              const confidenceClass = comp.confidence >= 0.8 ? 'high' : 
+                                    comp.confidence >= 0.5 ? 'medium' : 'low';
+              
+              item.innerHTML = `
+                <div class="component-info">
+                  <div class="component-name">${comp.component}</div>
+                  <div class="component-details">
+                    <span>Type: ${comp.type}</span>
+                    <span>Method: ${comp.method}</span>
+                    <span class="component-path">${comp.path}</span>
+                  </div>
+                </div>
+                <div class="confidence-badge ${confidenceClass}">
+                  ${Math.round((comp.confidence || 0) * 100)}%
+                </div>
+              `;
+              detectionsListEl.appendChild(item);
+            });
+          } else {
             const item = document.createElement('div');
             item.className = 'component-item';
             item.innerHTML = `
-              <div class="component-name">✅ ${comp.component}</div>
-              <div class="component-details">
-                Type: ${comp.type} | Source: ${result.name}
+              <div class="component-info">
+                <div class="component-name">❓ ${result.name}</div>
+                <div class="component-details">
+                  <span>No component mapping found</span>
+                </div>
               </div>
-              <div class="component-path">${comp.path}</div>
-              <button class="generate-button" onclick="generateCode(currentAnalysis)">
-                🚀 Generate Code
-              </button>
             `;
-            componentsDiv.appendChild(item);
-          });
-        } else {
-          const item = document.createElement('div');
-          item.className = 'component-item';
-          item.innerHTML = `
-            <div class="component-name">❓ ${result.name}</div>
-            <div class="component-details">
-              No component mapping found. Add to COMPONENT_PATTERNS.
-            </div>
-          `;
-          componentsDiv.appendChild(item);
+            detectionsListEl.appendChild(item);
+          }
+        });
+      } else {
+        detectionsListEl.innerHTML = '<div class="component-item"><div class="component-info"><div class="component-name">No SDS components detected</div></div></div>';
+      }
+      
+      resultsEl.classList.remove('hidden');
+      showStatus(`Generated code for ${totalComponents} components`, 'success');
+    }
+    
+    analyzeBtn.addEventListener('click', () => {
+      showStatus('Analyzing selection...', 'info');
+      showLoading();
+      resultsEl.classList.add('hidden');
+      
+      parent.postMessage({
+        pluginMessage: {
+          type: 'scan-selection'
         }
-      });
+      }, '*');
+    });
+    
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(currentCode);
+        showStatus('Code copied to clipboard!', 'success');
+      } catch (error) {
+        console.error('Failed to copy:', error);
+        showStatus('Failed to copy code', 'error');
+      }
+    });
+    
+    downloadBtn.addEventListener('click', () => {
+      if (!currentCode) return;
       
-      resultsDiv.classList.add('show');
-      resetScanButton();
+      const blob = new Blob([currentCode], { type: 'text/javascript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sds-component.jsx';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
       
-      showStatus(`✅ Found ${totalComponents} mappable components!`, 'success');
-    }
-
-    function displayCode(code) {
-      const codeDiv = document.getElementById('codeOutput');
-      const codeContent = document.getElementById('codeContent');
-      
-      generatedCode = code;
-      codeContent.textContent = code;
-      codeDiv.classList.add('show');
-      
-      showStatus('🎯 Code generated! Ready to copy and use.', 'success');
-    }
-
+      showStatus('Code downloaded!', 'success');
+    });
+    
     // Listen for messages from plugin
-    window.onmessage = (event) => {
-      const { type, results, code, message } = event.data.pluginMessage || {};
+    window.addEventListener('message', (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
       
-      switch (type) {
+      console.log('📨 UI received message:', msg.type);
+      
+      switch (msg.type) {
+        case 'plugin-ready':
+          showStatus('Ready to analyze SDS components', 'info');
+          break;
+          
+        case 'selection-changed':
+          updateSelectionInfo(msg.selection);
+          break;
+          
         case 'no-selection':
-          showStatus(message, 'error');
-          resetScanButton();
+          showStatus(msg.message, 'warning');
+          hideLoading();
           break;
           
         case 'analysis-complete':
-          displayResults(results);
+          showResults(msg);
+          hideLoading();
           break;
           
         case 'code-generated':
-          displayCode(code);
+          currentCode = msg.code;
+          generatedCodeEl.value = msg.code;
+          showStatus('Code generated!', 'success');
+          break;
+          
+        case 'error':
+          showStatus(msg.message || 'An error occurred', 'error');
+          hideLoading();
           break;
           
         default:
-          console.log('Unknown message type:', type);
+          console.log('❓ Unknown message type:', msg.type);
       }
-    };
-
-    // Auto-focus on load
-    window.addEventListener('load', () => {
-      showStatus('👋 Ready! Select components in Figma and click scan.', 'info');
     });
+    
+    // Show initial status
+    showStatus('Ready to analyze SDS components', 'info');
   </script>
 </body>
 </html>

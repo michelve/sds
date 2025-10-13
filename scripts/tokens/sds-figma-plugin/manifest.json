@@ -1,25 +1,35 @@
 {
-  "name": "SDS Component Scanner",
-  "id": "sds-component-scanner",
+  "name": "SDS Code Generator",
+  "id": "sds-code-generator",
   "api": "1.0.0",
-  "main": "code-consolidated.js",
-  "ui": "ui-consolidated.html",
-  "editorType": ["figma", "dev"],
-  "capabilities": ["inspect", "vscode"],
-  "enableProposedApi": false,
+  "main": "code.js",
+  "editorType": ["dev"],
+  "capabilities": ["codegen", "vscode"],
+  "codegenLanguages": [
+    {
+      "label": "React",
+      "value": "react"
+    },
+    {
+      "label": "React Native",
+      "value": "react-native"
+    }
+  ],
+  "enableProposedApi": true,
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": [
       "https://github.com",
       "https://api.github.com",
       "https://figma.com",
-      "https://api.figma.com"
+      "https://api.figma.com",
+      "https://*.figma.com"
     ],
     "devAllowedDomains": [
       "http://localhost",
       "https://localhost"
     ],
-    "reasoning": "Access to GitHub API for component source code retrieval and Figma API for design token synchronization. Localhost access needed for development and testing."
+    "reasoning": "Access to GitHub API for component source code retrieval, Figma API for design token synchronization, and Code Connect integration. Localhost access needed for development and testing."
   },
   "parameters": [
     {
@@ -33,7 +43,16 @@
       "key": "include-variables", 
       "optional": true,
       "allowFreeform": false
+    },
+    {
+      "name": "Code Style",
+      "key": "code-style",
+      "optional": true,
+      "allowFreeform": false
     }
   ],
-  "parameterOnly": false
+  "parameterOnly": false,
+  "permissions": [
+    "currentuser"
+  ]
 }

@@ -1,55 +1,75 @@
-# SDS Figma Plugin - Code Connect Integration
+# SDS Figma Plugin - Enhanced Code Connect Integration
 
-⚡ **UPDATED**: Now uses **Code Connect mappings** instead of hardcoded component detection patterns!
+⚡ **UPDATED**: Enhanced with latest Figma API 1.0.0 features and improved Code Connect integration!
 
-A modular Figma plugin that analyzes selected components and generates corresponding React code using the Simple Design System (SDS) architecture. Built following Figma development best practices with **Code Connect integration** for accurate component detection.
+A powerful Figma plugin that analyzes selected components and generates corresponding React code using the Simple Design System (SDS) architecture. Built with the latest Figma Plugin API and enhanced Code Connect integration for accurate component detection and code generation.
 
-## 🎯 Code Connect Integration
+## 🎯 Enhanced Features
 
-### ✅ What's New
-- **Code Connect Detection**: Uses existing `documentUrlSubstitutions` from `figma.config.json`
-- **Accurate Mapping**: Maps Figma node IDs to actual SDS components
-- **Dynamic Configuration**: No more hardcoded detection patterns
-- **Higher Confidence**: Exact matches via Code Connect URLs
+### ✅ What's New in This Version
+- **Latest Figma API 1.0.0**: Uses newest API features and capabilities
+- **Enhanced Code Connect**: Improved component detection with fuzzy matching
+- **Better UI/UX**: Modern interface with component usage visualization
+- **Advanced Code Generation**: Smart prop detection and variant mapping
+- **Real-time Feedback**: Live selection updates and confidence scoring
+- **Export Options**: Copy to clipboard and download functionality
 
-### 🔧 Architecture Changes
-- **New Module**: `modules/codeConnect.js` - Code Connect detector class
-- **Updated Main**: `code-modular-connect.js` - New main file with Code Connect integration
-- **Fixed Syntax**: Removed optional chaining operators (`?.`) for Figma compatibility
-- **Modular Design**: Cleaner separation between detection, generation, and configuration
+### 🔧 Architecture Improvements
+- **Enhanced Detection**: Multiple detection methods (exact match, fuzzy match, pattern-based)
+- **Smart Props**: Automatic prop generation based on component types and node properties
+- **Confidence Scoring**: Visual confidence indicators for component matches
+- **Error Handling**: Robust error handling and user feedback
+- **Performance**: Optimized for large selections and complex components
 
-## 🚀 Features
+## 🚀 Key Features
 
-- **Real SDS Integration**: Uses your actual `figma.config.json` and `tokens.json` configuration
-- **Intelligent Component Detection**: Recognizes forms, headers, buttons, inputs, cards, and text elements
-- **Design Token Mapping**: Converts Figma styles to your W3C design token format
-- **React Native Code Generation**: Generates ready-to-use code with `react-exo/utils` and `react-native-unistyles`
-- **Copy-Ready Output**: One-click copying of generated code
-- **Real Component Mapping**: Maps to your actual SDS component library paths
+### Component Detection
+- **Exact Matching**: Uses Code Connect node IDs for precise component identification
+- **Fuzzy Matching**: Intelligent name-based component detection
+- **Pattern Recognition**: Recognizes common component patterns and structures
+- **Confidence Scoring**: Provides confidence levels for each detected component
 
-## 📋 What It Detects
+### Code Generation
+- **React Components**: Generates clean, production-ready React code
+- **Smart Imports**: Automatically includes necessary import statements
+- **Prop Detection**: Extracts and maps component properties from Figma nodes
+- **Variant Support**: Detects and applies component variants (primary, secondary, etc.)
+- **Size Detection**: Automatically detects component sizes (small, medium, large)
+
+### User Interface
+- **Modern Design**: Clean, intuitive interface using Figma's design tokens
+- **Real-time Updates**: Live selection feedback and component counting
+- **Visual Feedback**: Color-coded confidence indicators and status messages
+- **Export Options**: Easy copy and download functionality
+
+## 📋 Supported Components
 
 ### Forms
-- **Contact Forms**: Detects forms with message fields → `ContactForm` component
-- **Login Forms**: Detects email/password combinations → `LoginForm` component  
-- **Registration Forms**: Detects multi-field signup forms → `RegisterForm` component
-- **Newsletter Forms**: Detects email + subscribe patterns → `NewsletterForm` component
+- **Contact Forms**: `ContactForm` component with proper validation
+- **Login Forms**: `LoginForm` with email/password handling
+- **Registration Forms**: `RegisterForm` with multi-field support
+- **Newsletter Forms**: `NewsletterForm` with email capture
 
-### Headers
-- **Main Headers**: Detects headers with logo/navigation → `Header` component
-- **Auth Headers**: Detects headers with sign-in elements → `HeaderAuth` component
+### Headers & Navigation
+- **Main Headers**: `Header` component with navigation
+- **Auth Headers**: `HeaderAuth` with user authentication elements
+- **Navigation Pills**: `NavigationPill` for tab-like navigation
+- **Tabs**: `Tabs` component with active state management
 
 ### Buttons & Inputs
-- **Buttons**: Maps to `Button` component with proper variants
-- **Icon Buttons**: Maps to `IconButton` component
-- **Input Fields**: Maps to `Input` component with validation
-- **Radio Groups**: Maps to `Radio` component with options
-- **Search Fields**: Maps to `Search` component
+- **Buttons**: `Button` with variant and size support
+- **Icon Buttons**: `IconButton` for icon-only actions
+- **Input Fields**: `Input` with label and validation support
+- **Search Fields**: `Search` component for search functionality
+- **Radio Groups**: `Radio` with option management
+- **Checkboxes**: `Checkbox` with label support
+- **Textareas**: `Textarea` with configurable rows
 
 ### Cards & Content
-- **Basic Cards**: Maps to `Card` component
-- **Pricing Cards**: Detects price elements → `PricingCard` component
-- **Text Elements**: Maps to `Text` and `TextHeading` components
+- **Basic Cards**: `Card` component for content containers
+- **Pricing Cards**: `PricingCard` with price and feature display
+- **Product Cards**: `ProductCard` with product information
+- **Text Elements**: `Text` and `TextHeading` components
 
 ## 📦 Installation
 
@@ -69,212 +89,147 @@ A modular Figma plugin that analyzes selected components and generates correspon
 ### Basic Workflow
 1. **Open any Figma file** with UI components
 2. **Select components** (forms, headers, buttons, inputs, etc.)
-3. **Run Plugin**: `Plugins` → `Development` → `SDS Component Scanner`
-4. **Click "Scan"** to analyze your selection
-5. **Review Results** to see detected components
-6. **Generate Code** for any detected component
-7. **Copy Code** and paste into your React Native project
+3. **Run Plugin**: `Plugins` → `Development` → `SDS Code Generator`
+4. **Click "Analyze Selection"** to scan your components
+5. **Review Results** to see detected components with confidence scores
+6. **Copy or Download** the generated React code
+7. **Paste into your project** and customize as needed
 
-### What Gets Detected
-The plugin intelligently detects:
-- ✅ **Forms** (fields, submit buttons, validation)
-- ✅ **Headers** (navigation, titles, user sections)
-- ✅ **Buttons** (primary, secondary, icon buttons)
-- ✅ **Inputs** (text fields, search, dropdowns)
-- ✅ **Radio Groups** (selection lists)
-- ✅ **Navigation** (tabs, menus, breadcrumbs)
+### Advanced Usage
+- **Multi-Component Selection**: Select multiple components to generate composite code
+- **Pattern Recognition**: The plugin can detect complex patterns and compositions
+- **Confidence Indicators**: Use confidence scores to verify component matches
+- **Export Options**: Choose between clipboard copy or file download
 
-### Generated Code Features
-- 🎯 **Component Mapping**: Uses your actual React Native components
-- 🎨 **Design Tokens**: Converts Figma values to your SDS tokens
-- 📱 **Platform Variants**: Includes Mobile/Desktop responsive patterns
-- 📦 **Proper Imports**: Generates correct import statements
-- 🔧 **useVariants Hook**: Uses your styling patterns
+## 🎯 Component Detection Methods
 
-## 📝 Example Usage
+### 1. Exact Match (100% Confidence)
+- Uses Code Connect node IDs for precise identification
+- Highest accuracy for components with established mappings
+- Recommended for production use
 
-### Input: Figma Form Selection
-When you select a login form in Figma:
+### 2. Fuzzy Match (80% Confidence)
+- Name-based detection with intelligent matching
+- Good for components with descriptive names
+- Useful for rapid prototyping
 
-### Output: Generated React Native Code
-```tsx
-import React from 'react';
-import { View } from 'react-native';
-import { useVariants } from 'react-exo/utils';
-import { 
-  Section, 
-  Input, 
-  Button, 
-  Text 
-} from '@/components';
+### 3. Pattern Match (Variable Confidence)
+- Recognizes common component patterns
+- Useful for custom or unmapped components
+- Provides fallback detection
 
-const LoginForm = () => {
-  const sectionVariants = useVariants({
-    platform: {
-      Mobile: { padding: 'sds.size.space.600' },
-      Desktop: { padding: 'sds.size.space.1200' }
+## 🔧 Configuration
+
+### Code Connect Integration
+The plugin uses your existing `figma.config.json` configuration:
+```json
+{
+  "codeConnect": {
+    "documentUrlSubstitutions": {
+      "<FIGMA_BUTTONS_BUTTON>": "https://figma.com/design/...",
+      "<FIGMA_INPUTS_INPUT_FIELD>": "https://figma.com/design/..."
     }
-  });
-
-  return (
-    <View style={sectionVariants()}>
-      <Text variant="heading">Welcome Back</Text>
-      
-      <Input 
-        placeholder="Email"
-        keyboardType="email-address"
-        style={{ marginBottom: 'sds.size.space.400' }}
-      />
-      
-      <Input 
-        placeholder="Password"
-        secureTextEntry
-        style={{ marginBottom: 'sds.size.space.600' }}
-      />
-      
-      <Button variant="primary" size="large">
-        Sign In
-      </Button>
-    </View>
-  );
-};
-
-export default LoginForm;
+  }
+}
 ```
 
-## 🔧 Customization
+### Component Mappings
+Components are automatically mapped based on:
+- **Node IDs**: Direct mapping from Figma to code components
+- **Component Names**: Intelligent name-based matching
+- **Pattern Recognition**: Common UI patterns and structures
 
-### Adding New Component Patterns
-Edit `modules/components.js` and add to `SDS_COMPONENT_PATTERNS`:
+## 🛠️ Development
 
-```javascript
-SDS_COMPONENT_PATTERNS.CUSTOM_COMPONENT = {
-  detect: (node) => {
-    // Your detection logic
-    return node.name.toLowerCase().includes('custom');
-  },
-  type: 'custom',
-  component: 'CustomComponent',
-  path: '@/components/CustomComponent'
-};
+### File Structure
+```
+sds-figma-plugin/
+├── manifest.json          # Plugin configuration
+├── code.js               # Main plugin logic
+├── ui.html               # User interface
+├── README.md             # This file
+└── modules/              # Modular components (legacy)
+    ├── config.js
+    ├── codeConnect.js
+    └── ...
 ```
 
-### Adding Design Tokens
-Add to the Variables API module in `modules/variables.js`:
+### Key Classes
+- **SDSConfigurationManager**: Handles configuration and Code Connect mappings
+- **SDSCodeConnectDetector**: Main component detection logic
+- **Code Generation Functions**: React code generation utilities
 
-```javascript
-// Add to mapVariableToSdsToken function
-case 'custom-spacing':
-  return 'sds.size.space.custom';
-case 'custom-color':
-  return 'sds.color.brand.custom';
-```
+### Adding New Components
+1. **Update figma.config.json** with new component mappings
+2. **Add component details** in `getComponentDetails()` method
+3. **Test detection** with sample Figma components
+4. **Update documentation** with new component information
 
 ## 🐛 Troubleshooting
 
-### Plugin Not Appearing
-- ✅ Ensure you're using **Figma Desktop App** (not browser)
-- ✅ Check that `manifest.json` is valid
-- ✅ Restart Figma after installation
-
-### No Components Detected
-- ✅ **Select actual components** in Figma (not just empty frames)
-- ✅ **Name components clearly** (e.g., "Login Form", "Submit Button")
-- ✅ Check that your selection includes recognizable UI patterns
-
-### Code Generation Issues
-- ✅ **Review console** for any JavaScript errors
-- ✅ **Check component patterns** match your Figma naming
-- ✅ **Verify token mappings** in DESIGN_TOKEN_MAP
-
-### UI Not Loading
-- ✅ **Check `ui.html`** file is in the same directory
-- ✅ **Ensure network permissions** in manifest.json
-- ✅ **Clear Figma cache** and restart
-
-## 📊 Plugin Architecture
-
-### Core Files
-- **`manifest.json`**: Plugin configuration and permissions
-- **`code-modular.js`**: Main plugin coordination and module integration
-- **`ui.html`**: User interface with modular script loading
-- **`modules/`**: Directory containing all plugin modules
-  - **`config.js`**: Configuration management
-  - **`variables.js`**: Variables API integration
-  - **`components.js`**: Component detection patterns
-  - **`codeGen.js`**: Code generation templates
-  - **`devMode.js`**: Dev Mode specific features
-
-### Key Functions
-- **`initializePlugin()`**: Initializes all modules in correct order
-- **`window.componentsModule.analyzeSelection()`**: Scans Figma nodes for component patterns
-- **`window.codeGenModule.generateSdsCode()`**: Creates React Native code from detected components
-- **`window.variablesModule.getLocalVariables()`**: Extracts Variables API data
-- **`window.devModeModule.initializeDevMode()`**: Sets up Dev Mode features
-
-## 🎯 Use Cases
-
-### For Developers
-1. **Quick Implementation**: Copy-paste ready code for Figma designs
-2. **Consistent Patterns**: Ensures use of actual codebase components
-3. **Token Accuracy**: Automatic design token mapping
-4. **Time Saving**: No manual component mapping or guessing
-
-### For Design Teams
-1. **Design Validation**: See how designs map to actual components
-2. **Component Discovery**: Find existing components for reuse
-3. **Implementation Preview**: See generated code before handoff
-
-### For Product Teams
-1. **Implementation Speed**: Faster design-to-code workflow
-2. **Consistency**: Ensures designs use existing component library
-3. **Documentation**: Generated code serves as implementation reference
-
-## 🔄 Workflow Integration
-
-### Design Handoff Process
-1. **Designer**: Creates/updates designs in Figma
-2. **Designer**: Runs plugin to verify component mapping
-3. **Designer**: Shares generated code with implementation notes
-4. **Developer**: Uses generated code as starting point
-5. **Developer**: Customizes and integrates into project
-
-### Development Workflow
-1. **Select Design**: Choose components to implement
-2. **Scan & Generate**: Use plugin to create base code
-3. **Copy & Customize**: Paste code and add business logic
-4. **Test & Iterate**: Verify implementation matches design
-
-## 📈 Future Enhancements
-
-### Planned Features
-- 🎯 **Component Library Sync**: Automatic detection of new components
-- 🎨 **Style Export**: Generate complete stylesheets
-- 📱 **Platform Optimization**: Better Mobile/Desktop variant handling
-- 🔧 **Custom Hooks**: Generate useVariants patterns automatically
-- 📊 **Usage Analytics**: Track component usage patterns
-
-### Contributing
-To enhance the plugin:
-1. **Fork/Clone** the plugin files
-2. **Modify** detection patterns and code generation
-3. **Test** with your specific component patterns
-4. **Document** new features and patterns
-
-## 📞 Support
-
 ### Common Issues
-- **Component not detected**: Add pattern to `COMPONENT_PATTERNS`
-- **Wrong token generated**: Update `DESIGN_TOKEN_MAP`
-- **Code format issues**: Modify `generateComponentCode` function
 
-### Getting Help
-- Check the plugin console for detailed error messages
-- Review the component detection patterns
-- Verify your Figma selection includes recognizable UI elements
-- Ensure your components are properly named and structured
+#### No Components Detected
+- **Check Selection**: Ensure components are properly selected
+- **Verify Mappings**: Confirm Code Connect mappings are correct
+- **Try Fuzzy Matching**: Some components may need name-based detection
+
+#### Low Confidence Scores
+- **Improve Naming**: Use descriptive component names
+- **Add Mappings**: Create explicit Code Connect mappings
+- **Check Patterns**: Verify component structure matches expected patterns
+
+#### Code Generation Issues
+- **Check Imports**: Verify component import paths are correct
+- **Validate Props**: Ensure component props match SDS component API
+- **Test Components**: Verify generated code works in your project
+
+### Debug Mode
+Enable debug logging by opening browser console in Figma:
+1. **Open Figma in Browser**
+2. **Open Developer Tools** (F12)
+3. **Run Plugin** and check console for detailed logs
+
+## 📚 API Reference
+
+### Plugin Messages
+- `scan-selection`: Analyze selected components
+- `generate-code`: Generate code for specific components
+- `close-plugin`: Close the plugin
+
+### Response Messages
+- `plugin-ready`: Plugin initialization complete
+- `selection-changed`: Selection updated
+- `analysis-complete`: Component analysis finished
+- `code-generated`: Code generation complete
+- `error`: Error occurred during processing
+
+## 🤝 Contributing
+
+### Adding New Component Types
+1. **Identify Component Pattern**: Analyze Figma component structure
+2. **Create Mapping**: Add to `getComponentDetails()` method
+3. **Test Detection**: Verify detection works with sample components
+4. **Update Documentation**: Add component to supported list
+
+### Improving Detection
+1. **Analyze False Positives**: Identify incorrect detections
+2. **Enhance Patterns**: Improve pattern recognition logic
+3. **Add Fuzzy Matching**: Improve name-based detection
+4. **Test Edge Cases**: Verify with complex component structures
+
+## 📄 License
+
+This plugin is part of the Simple Design System (SDS) and follows the same licensing terms.
+
+## 🆘 Support
+
+For issues, questions, or contributions:
+1. **Check Documentation**: Review this README and code comments
+2. **Test with Samples**: Try with known working components
+3. **Enable Debug Mode**: Check console for detailed error information
+4. **Report Issues**: Include component examples and error details
 
 ---
 
-**Ready to scan your first component?** 🚀 
-Install the plugin and select any form, header, or button in Figma to get started!
+**Happy Coding! 🎨✨**
