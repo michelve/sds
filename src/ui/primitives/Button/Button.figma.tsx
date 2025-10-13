@@ -1,11 +1,7 @@
 import figma, {react} from '@figma/code-connect/react';
 import { Button, ButtonDanger, ButtonGroup, Icon } from 'primitives';
 
-// NOTE: Replace these URLs with your real component links from Figma (main components, not instances)
-const FIGMA_BUTTON_URL = 'hhttps://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4185-3778&m=dev';
-const FIGMA_BUTTON_DANGER_URL = 'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=185-852&m=dev';
-const FIGMA_BUTTON_GROUP_URL = 'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=2072-9432&m=dev';
-const FIGMA_ICON_BUTTON_URL = 'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=11-11508&m=dev';
+// NOTE: Use string literals for URLs (required by the parser)
 
 // Map Figma display names to SDS prop values – update display names to match the Figma properties exactly
 const VariantMap = {
@@ -21,11 +17,18 @@ const SizeMap = {
 
 // Regular Button
 figma.connect(
-  FIGMA_BUTTON_URL,
+  'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4185-3778&m=dev',
   {
     props: {
-      Variant: figma.enum('Variant', VariantMap),
-      Size: figma.enum('Size', SizeMap),
+      Variant: figma.enum('Variant', {
+        Primary: 'primary',
+        Neutral: 'neutral',
+        Subtle: 'subtle',
+      }),
+      Size: figma.enum('Size', {
+        Small: 'small',
+        Medium: 'medium',
+      }),
       Label: figma.string('Label'),
       // Optional link behavior (Button can render an anchor when href is set)
       Href: figma.string('Href'),
@@ -50,10 +53,13 @@ figma.connect(
 
 // Danger Button (destructive)
 figma.connect(
-  FIGMA_BUTTON_DANGER_URL,
+  'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=185-852&m=dev',
   {
     props: {
-      Size: figma.enum('Size', SizeMap),
+      Size: figma.enum('Size', {
+        Small: 'small',
+        Medium: 'medium',
+      }),
       Label: figma.string('Label'),
       Href: figma.string('Href'),
       AriaLabel: figma.string('Aria Label'),
@@ -75,7 +81,7 @@ figma.connect(
 
 // Button Group
 figma.connect(
-  FIGMA_BUTTON_GROUP_URL,
+  'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=2072-9432&m=dev',
   {
     props: {
       Align: figma.enum('Align', {
@@ -102,11 +108,18 @@ figma.connect(
 
 // Icon Button (Button with leading icon)
 figma.connect(
-  FIGMA_ICON_BUTTON_URL,
+  'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=11-11508&m=dev',
   {
     props: {
-      Variant: figma.enum('Variant', VariantMap),
-      Size: figma.enum('Size', SizeMap),
+      Variant: figma.enum('Variant', {
+        Primary: 'primary',
+        Neutral: 'neutral',
+        Subtle: 'subtle',
+      }),
+      Size: figma.enum('Size', {
+        Small: 'small',
+        Medium: 'medium',
+      }),
       Label: figma.string('Label'),
       IconName: figma.string('Icon Name'), // name of the icon component to render
       Disabled: figma.boolean('Disabled'),
