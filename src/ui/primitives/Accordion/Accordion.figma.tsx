@@ -1,5 +1,5 @@
 import React from "react"
-import { ListBox, ListBoxItem } from "./ListBox"
+import { Accordion, AccordionItem } from "./Accordion"
 import figma from "@figma/code-connect"
 
 /**
@@ -10,33 +10,43 @@ import figma from "@figma/code-connect"
  */
 
 figma.connect(
-  ListBox,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13538",
+  Accordion,
+  "<FIGMA_ACCORDION_ACCORDION>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.children("ListBox Item"),
+      children: figma.children("Accordion Item"),
     },
     example: (props) => (
-      <ListBox>
+      <Accordion>
         {props.children}
-      </ListBox>
+      </Accordion>
     ),
   },
 )
 
 figma.connect(
-  ListBoxItem,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13538",
+  AccordionItem,
+  "<FIGMA_ACCORDION_ACCORDION_ITEM>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.string("Text"),
+      title: figma.string("Title"),
+      children: figma.string("Content"),
+      isExpanded: figma.enum("State", {
+        Open: true,
+        Closed: false
+      }),
+      isDisabled: figma.boolean("Disabled"),
     },
     example: (props) => (
-      <ListBoxItem>
+      <AccordionItem
+        title={props.title}
+        isExpanded={props.isExpanded}
+        isDisabled={props.isDisabled}
+      >
         {props.children}
-      </ListBoxItem>
+      </AccordionItem>
     ),
   },
 )

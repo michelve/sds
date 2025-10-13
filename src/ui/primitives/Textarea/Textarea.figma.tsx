@@ -1,5 +1,5 @@
 import React from "react"
-import { Search } from "./Search"
+import { TextareaField } from "./Textarea"
 import figma from "@figma/code-connect"
 
 /**
@@ -10,29 +10,41 @@ import figma from "@figma/code-connect"
  */
 
 figma.connect(
-  Search,
-  "<FIGMA_INPUTS_SEARCH>",
+  TextareaField,
+  "<FIGMA_INPUTS_TEXTAREA_FIELD>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
+      label: figma.string("Label"),
+      description: figma.boolean("Has Description", {
+        true: figma.string("Description"),
+        false: undefined,
+      }),
+      isDisabled: figma.enum("State", { 
+        Disabled: true,
+        Default: false
+      }),
+      errorMessage: figma.enum("State", {
+        Error: figma.string("Error"),
+        Default: undefined
+      }),
       value: figma.enum("Value Type", {
         Default: figma.string("Value"),
         Placeholder: undefined
       }),
       placeholder: figma.enum("Value Type", {
         Placeholder: figma.string("Value"),
-        Default: "Placeholder here..."
-      }),
-      isDisabled: figma.enum("State", {
-        Disabled: true,
-        Default: false
+        Default: "I am a placeholder..."
       }),
     },
     example: (props) => (
-      <Search
+      <TextareaField
+        label={props.label}
+        description={props.description}
+        isDisabled={props.isDisabled}
+        errorMessage={props.errorMessage}
         value={props.value}
         placeholder={props.placeholder}
-        isDisabled={props.isDisabled}
       />
     ),
   },

@@ -1,5 +1,5 @@
 import React from "react"
-import { Text } from "./Text"
+import { Logo } from "./Logo"
 import figma from "@figma/code-connect"
 
 /**
@@ -10,17 +10,18 @@ import figma from "@figma/code-connect"
  */
 
 figma.connect(
-  Text,
-  "<FIGMA_TEXT_TEXT>",
+  Logo,
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13568",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.string("Text"),
+      // Basic Logo component - can be expanded with additional properties
+      // as needed for your Figma design system
     },
     example: (props) => (
-      <Text>
-        {props.children}
-      </Text>
+      <Logo>
+        {/* Logo SVG content is built-in */}
+      </Logo>
     ),
   },
 )

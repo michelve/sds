@@ -1,5 +1,5 @@
 import React from "react"
-import { Tag } from "./Tag"
+import { SliderField } from "./Slider"
 import figma from "@figma/code-connect"
 
 /**
@@ -10,31 +10,28 @@ import figma from "@figma/code-connect"
  */
 
 figma.connect(
-  Tag,
-  "<FIGMA_TAGS_TAG>",
+  SliderField,
+  "<FIGMA_INPUTS_SLIDER_FIELD>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.string("Text"),
-      scheme: figma.enum("Scheme", {
-        Brand: "brand",
-        Danger: "danger",
-        Positive: "positive",
-        Warning: "warning",
-        Neutral: "neutral"
+      label: figma.string("Label"),
+      description: figma.boolean("Has Description", {
+        true: figma.string("Description"),
+        false: undefined,
       }),
-      variant: figma.enum("Variant", {
-        Primary: "primary",
-        Secondary: "secondary"
+      isDisabled: figma.enum("State", { 
+        Disabled: true,
+        Default: false
       }),
     },
     example: (props) => (
-      <Tag
-        scheme={props.scheme}
-        variant={props.variant}
-      >
-        {props.children}
-      </Tag>
+      <SliderField
+        label={props.label}
+        description={props.description}
+        isDisabled={props.isDisabled}
+        showOutput
+      />
     ),
   },
 )

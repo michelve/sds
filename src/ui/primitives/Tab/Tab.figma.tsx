@@ -1,5 +1,5 @@
 import React from "react"
-import { ListBox, ListBoxItem } from "./ListBox"
+import { Tab, Tabs, TabList, TabPanel } from "./Tab"
 import figma from "@figma/code-connect"
 
 /**
@@ -10,33 +10,34 @@ import figma from "@figma/code-connect"
  */
 
 figma.connect(
-  ListBox,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13538",
+  Tab,
+  "<FIGMA_TABS_TAB>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.children("ListBox Item"),
+      children: figma.string("Label"),
     },
     example: (props) => (
-      <ListBox>
+      <Tab id={props.children}>
         {props.children}
-      </ListBox>
+      </Tab>
     ),
   },
 )
 
 figma.connect(
-  ListBoxItem,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13538",
+  Tabs,
+  "<FIGMA_TABS_TABS>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.string("Text"),
+      children: figma.children("Tab"),
     },
     example: (props) => (
-      <ListBoxItem>
-        {props.children}
-      </ListBoxItem>
+      <Tabs>
+        <TabList>{props.children}</TabList>
+        <TabPanel id="match-each-tab">Some content</TabPanel>
+      </Tabs>
     ),
   },
 )

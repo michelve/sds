@@ -1,5 +1,5 @@
 import React from "react"
-import { Tag } from "./Tag"
+import { Icon } from "./Icon"
 import figma from "@figma/code-connect"
 
 /**
@@ -10,31 +10,26 @@ import figma from "@figma/code-connect"
  */
 
 figma.connect(
-  Tag,
-  "<FIGMA_TAGS_TAG>",
+  Icon,
+  "<FIGMA_ICONS_BASE>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.string("Text"),
-      scheme: figma.enum("Scheme", {
-        Brand: "brand",
-        Danger: "danger",
-        Positive: "positive",
-        Warning: "warning",
-        Neutral: "neutral"
+      size: figma.enum("Size", {
+        "14": "14",
+        "16": "16",
+        "20": "20",
+        "24": "24",
+        "32": "32",
+        "40": "40",
+        "48": "48"
       }),
-      variant: figma.enum("Variant", {
-        Primary: "primary",
-        Secondary: "secondary"
-      }),
+      children: figma.children("SVG Path"), // SVG content as children
     },
     example: (props) => (
-      <Tag
-        scheme={props.scheme}
-        variant={props.variant}
-      >
+      <Icon size={props.size}>
         {props.children}
-      </Tag>
+      </Icon>
     ),
   },
 )
