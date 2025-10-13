@@ -2,7 +2,6 @@ import { clsx } from "clsx";
 import React, { ComponentPropsWithoutRef } from "react";
 import { Button as RACButton, Link as RACLink } from "react-aria-components";
 import { type AnchorOrButtonProps } from "utils";
-import { Icon } from "primitives";
 import "./button.css";
 
 export type ButtonProps = Omit<ButtonBaseProps, "variant"> & {
@@ -12,18 +11,7 @@ export type ButtonProps = Omit<ButtonBaseProps, "variant"> & {
   >;
 };
 export const Button = React.forwardRef(function Button(
-  { 
-    className, 
-    size = "medium", 
-    variant = "primary", 
-    label,
-    iconStart,
-    iconEnd,
-    hasIconStart,
-    hasIconEnd,
-    children,
-    ...props 
-  }: ButtonProps,
+  { className, size = "medium", variant = "primary", ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLElement>,
 ) {
   const classNames = clsx(
@@ -35,22 +23,13 @@ export const Button = React.forwardRef(function Button(
 
   const { style, ...sharedProps } = props;
 
-  // Use label prop if provided, otherwise fall back to children
-  const content = label || children;
-  
-  // Render icons based on props
-  const startIcon = (hasIconStart && iconStart) ? iconStart : null;
-  const endIcon = (hasIconEnd && iconEnd) ? iconEnd : null;
-
   return isAnchorProps(props) ? (
     <RACLink
       {...sharedProps}
       className={classNames}
       ref={ref as React.ForwardedRef<HTMLAnchorElement>}
     >
-      {startIcon}
-      {content}
-      {endIcon}
+      {props.children}
     </RACLink>
   ) : (
     <RACButton
@@ -58,9 +37,7 @@ export const Button = React.forwardRef(function Button(
       className={classNames}
       ref={ref as React.ForwardedRef<HTMLButtonElement>}
     >
-      {startIcon}
-      {content}
-      {endIcon}
+      {props.children}
     </RACButton>
   );
 });
@@ -79,12 +56,6 @@ export const ButtonDanger = React.forwardRef(function Button(
     className,
     size = "medium",
     variant = "danger-primary",
-    label,
-    iconStart,
-    iconEnd,
-    hasIconStart,
-    hasIconEnd,
-    children,
     ...props
   }: ButtonDangerProps,
   ref: React.ForwardedRef<HTMLElement>,
@@ -98,22 +69,13 @@ export const ButtonDanger = React.forwardRef(function Button(
 
   const { style, ...sharedProps } = props;
 
-  // Use label prop if provided, otherwise fall back to children
-  const content = label || children;
-  
-  // Render icons based on props
-  const startIcon = (hasIconStart && iconStart) ? iconStart : null;
-  const endIcon = (hasIconEnd && iconEnd) ? iconEnd : null;
-
   return isAnchorProps(props) ? (
     <RACLink
       {...sharedProps}
       className={classNames}
       ref={ref as React.ForwardedRef<HTMLAnchorElement>}
     >
-      {startIcon}
-      {content}
-      {endIcon}
+      {props.children}
     </RACLink>
   ) : (
     <RACButton
@@ -121,9 +83,7 @@ export const ButtonDanger = React.forwardRef(function Button(
       className={classNames}
       ref={ref as React.ForwardedRef<HTMLButtonElement>}
     >
-      {startIcon}
-      {content}
-      {endIcon}
+      {props.children}
     </RACButton>
   );
 });
@@ -137,11 +97,6 @@ type ButtonBaseProps = {
     | "subtle"
     | "danger-primary"
     | "danger-subtle";
-  label?: string;
-  iconStart?: React.ReactNode;
-  iconEnd?: React.ReactNode;
-  hasIconStart?: boolean;
-  hasIconEnd?: boolean;
 } & AnchorOrButtonProps;
 
 function isAnchorProps(
