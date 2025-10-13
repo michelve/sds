@@ -11,26 +11,28 @@ import figma from "@figma/code-connect"
 
 figma.connect(
   RadioField,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13594",
+  "<FIGMA_INPUTS_RADIO_FIELD>",
   {
     props: {
       // These props were automatically mapped based on your linked code:
       label: figma.string("Label"),
-      description: figma.string("Description"),
-      isDisabled: figma.boolean("State", {
-        true: "Disabled",
-        false: "Default"
+      description: figma.boolean("Has Description", {
+        true: figma.string("Description"),
+        false: undefined,
       }),
-      isSelected: figma.boolean("Value Type", {
-        true: "Checked",
-        false: "Unchecked"
+      isDisabled: figma.enum("State", { 
+        Disabled: true,
+        Default: false
       }),
-      hasDescription: figma.boolean("Has Description"),
+      isSelected: figma.enum("Value Type", {
+        Checked: true,
+        Unchecked: false
+      }),
     },
     example: (props) => (
       <RadioField
         label={props.label}
-        description={props.hasDescription ? props.description : undefined}
+        description={props.description}
         isDisabled={props.isDisabled}
         isSelected={props.isSelected}
       >
