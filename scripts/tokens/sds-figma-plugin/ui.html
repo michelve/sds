@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SDS Component Scanner</title>
+  <title>SDS Component Scanner (Modular)</title>
+  
+  <!-- Load all modules in the correct order -->
+  <script src="modules/config.js"></script>
+  <script src="modules/variables.js"></script>
+  <script src="modules/components.js"></script>
+  <script src="modules/codeGen.js"></script>
+  <script src="modules/devMode.js"></script>
+  
   <style>
     * { box-sizing: border-box; }
     body { 
@@ -225,20 +233,17 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🎯 SDS Component Scanner</h1>
-    <p>Scan Figma selections and map to your actual React Native components</p>
-  </div>
+
 
   <div class="container">
     <div class="scan-section">
-      <h3 style="margin-top: 0;">📱 Quick Scan</h3>
+      <h3 style="margin-top: 0;">Quick Scan</h3>
       <p style="color: #586069; font-size: 12px; margin-bottom: 15px;">
         Select a form, header, button, or any component in Figma, then click scan to detect components and generate code.
       </p>
       
       <button id="scanBtn" class="scan-button" onclick="scanSelection()">
-        <span id="scanText">🔍 Scan Figma Selection</span>
+        <span id="scanText">Scan Figma Selection</span>
       </button>
     </div>
 
@@ -246,7 +251,7 @@
 
     <div id="results" class="results">
       <div class="result-header">
-        <span>🎯 Detected Components</span>
+        <span>Detected Components</span>
         <span id="componentCount">0 components</span>
       </div>
       <div id="detectedComponents" class="detected-components"></div>
@@ -254,7 +259,7 @@
 
     <div id="codeOutput" class="code-output">
       <div class="code-header">
-        <strong>📋 Generated Code</strong>
+        <strong>Generated Code</strong>
         <button class="copy-button" onclick="copyCode()">Copy</button>
       </div>
       <div id="codeContent" class="code-content"></div>

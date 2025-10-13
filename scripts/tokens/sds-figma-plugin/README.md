@@ -1,6 +1,6 @@
-# 🎯 SDS Component Scanner - Enhanced Figma Plugin
+# SDS Figma Plugin
 
-An intelligent Figma plugin that scans your designs and maps them to your actual React Native SDS (Simple Design System) codebase. Get copy-ready code with proper imports, design tokens, and component patterns.
+A modular Figma plugin that analyzes selected components and generates corresponding React Native code using the Simple Design System (SDS) architecture. Built following Figma development best practices with proper Variables API integration and Dev Mode support.
 
 ## 🚀 Features
 
@@ -129,10 +129,10 @@ export default LoginForm;
 ## 🔧 Customization
 
 ### Adding New Component Patterns
-Edit `code.js` and add to `COMPONENT_PATTERNS`:
+Edit `modules/components.js` and add to `SDS_COMPONENT_PATTERNS`:
 
 ```javascript
-COMPONENT_PATTERNS.CUSTOM_COMPONENT = {
+SDS_COMPONENT_PATTERNS.CUSTOM_COMPONENT = {
   detect: (node) => {
     // Your detection logic
     return node.name.toLowerCase().includes('custom');
@@ -144,11 +144,14 @@ COMPONENT_PATTERNS.CUSTOM_COMPONENT = {
 ```
 
 ### Adding Design Tokens
-Add to `DESIGN_TOKEN_MAP` in `code.js`:
+Add to the Variables API module in `modules/variables.js`:
 
 ```javascript
-DESIGN_TOKEN_MAP.spacing[24] = 'sds.size.space.600';
-DESIGN_TOKEN_MAP.colors['#FF5722'] = 'sds.color.brand.800';
+// Add to mapVariableToSdsToken function
+case 'custom-spacing':
+  return 'sds.size.space.custom';
+case 'custom-color':
+  return 'sds.color.brand.custom';
 ```
 
 ## 🐛 Troubleshooting
@@ -177,13 +180,21 @@ DESIGN_TOKEN_MAP.colors['#FF5722'] = 'sds.color.brand.800';
 
 ### Core Files
 - **`manifest.json`**: Plugin configuration and permissions
-- **`code.js`**: Main plugin logic and component detection
-- **`ui.html`**: User interface with scan/generate functionality
+- **`code-modular.js`**: Main plugin coordination and module integration
+- **`ui.html`**: User interface with modular script loading
+- **`modules/`**: Directory containing all plugin modules
+  - **`config.js`**: Configuration management
+  - **`variables.js`**: Variables API integration
+  - **`components.js`**: Component detection patterns
+  - **`codeGen.js`**: Code generation templates
+  - **`devMode.js`**: Dev Mode specific features
 
 ### Key Functions
-- **`analyzeSelection()`**: Scans Figma nodes for component patterns
-- **`generateComponentCode()`**: Creates React Native code from detected components
-- **`mapDesignTokens()`**: Converts Figma values to SDS tokens
+- **`initializePlugin()`**: Initializes all modules in correct order
+- **`window.componentsModule.analyzeSelection()`**: Scans Figma nodes for component patterns
+- **`window.codeGenModule.generateSdsCode()`**: Creates React Native code from detected components
+- **`window.variablesModule.getLocalVariables()`**: Extracts Variables API data
+- **`window.devModeModule.initializeDevMode()`**: Sets up Dev Mode features
 
 ## 🎯 Use Cases
 

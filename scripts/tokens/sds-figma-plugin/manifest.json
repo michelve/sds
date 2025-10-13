@@ -2,7 +2,7 @@
   "name": "SDS Component Scanner",
   "id": "sds-component-scanner",
   "api": "1.0.0",
-  "main": "code-enhanced.js",
+  "main": "code-modular.js",
   "ui": "ui.html",
   "editorType": ["figma", "dev"],
   "capabilities": ["inspect","vscode"],

@@ -1,0 +1,419 @@
+// ===== MAIN PLUGIN MODULE =====
+// This is the main entry point that integrates all modules
+// Follows Figma documentation patterns for plugin initialization and message routing
+
+// Load all modules in the correct order
+// These will be available as window.* globals in the Figma plugin environment
+
+/**
+ * Plugin initialization with async patterns
+ * Follows Figma documentation for proper plugin setup
+ */
+async function initializePlugin() {
+  try {
+    console.log('🚀 Initializing SDS Component Scanner with modular architecture...');
+    
+    // Initialize configuration first
+    let config = null;
+    if (window.sdsConfigModule) {
+      try {
+        config = await window.sdsConfigModule.initialize();
+        console.log('✅ Configuration loaded:', window.sdsConfigModule.getConfigurationSummary());
+      } catch (error) {
+        console.log('⚠️ Configuration fallback mode:', error.message);
+      }
+    }
+    
+    // Initialize Variables API
+    if (window.variablesModule) {
+      try {
+        const variables = await window.variablesModule.getLocalVariables();
+        console.log('✅ Variables API initialized:', Object.keys(variables).length, 'categories');
+      } catch (error) {
+        console.log('⚠️ Variables API fallback mode:', error.message);
+      }
+    }
+    
+    // Initialize Dev Mode features
+    if (window.devModeModule) {
+      const devConfig = await window.devModeModule.initializeDevMode();
+      console.log('🔧 Dev Mode configured:', devConfig);
+    }
+    
+    // Set up UI with responsive sizing
+    setupPluginUI();
+    
+    // Set up message handling
+    setupMessageHandlers();
+    
+    console.log('✅ SDS Component Scanner ready with modular architecture!');
+    
+    // Send ready message to UI with dynamic configuration
+    figma.ui.postMessage({
+      type: 'plugin-ready',
+      config: config || { documentUrls: {} },
+      configSummary: window.sdsConfigModule ? window.sdsConfigModule.getConfigurationSummary() : null,
+      modules: {
+        config: !!window.sdsConfigModule,
+        variables: !!window.variablesModule,
+        components: !!window.componentsModule,
+        codeGen: !!window.codeGenModule,
+        devMode: !!window.devModeModule
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Error initializing plugin:', error);
+    
+    figma.ui.postMessage({
+      type: 'initialization-error',
+      error: error.message
+    });
+  }
+}
+
+/**
+ * Setup plugin UI with responsive design
+ */
+function setupPluginUI() {
+  // Show UI with appropriate size for different contexts
+  let width = 400;
+  let height = 600;
+  
+  // Adjust for Dev Mode if available
+  if (window.devModeModule && window.devModeModule.DevModeConfig.isDevMode) {
+    width = 480;
+    height = 720;
+  }
+  
+  figma.showUI(__html__, { width, height });
+  
+  // Enable auto-resize for responsive behavior
+  figma.ui.resize(width, height);
+}
+
+/**
+ * Setup message handlers for UI communication
+ * Routes messages to appropriate modules
+ */
+function setupMessageHandlers() {
+  figma.ui.onmessage = async (msg) => {
+    try {
+      console.log('📨 Received message:', msg.type);
+      
+      switch (msg.type) {
+        case 'scan-selection':
+          await handleScanSelection();
+          break;
+          
+        case 'generate-code':
+          await handleGenerateCode(msg.componentData);
+          break;
+          
+        case 'inspect-node':
+          await handleInspectNode(msg.nodeId);
+          break;
+          
+        case 'export-node':
+          await handleExportNode(msg.nodeId, msg.format);
+          break;
+          
+        case 'get-variables':
+          await handleGetVariables();
+          break;
+          
+        case 'resize-ui':
+          handleResizeUI(msg.width, msg.height);
+          break;
+          
+        case 'get-component-hierarchy':
+          await handleGetComponentHierarchy();
+          break;
+          
+        default:
+          console.log('⚠️ Unknown message type:', msg.type);
+      }
+      
+    } catch (error) {
+      console.error('❌ Error handling message:', error);
+      
+      figma.ui.postMessage({
+        type: 'error',
+        message: error.message,
+        originalType: msg.type
+      });
+    }
+  };
+}
+
+/**
+ * Handle scan selection request
+ * Uses components module for analysis
+ */
+async function handleScanSelection() {
+  if (!window.componentsModule) {
+    throw new Error('Components module not available');
+  }
+  
+  console.log('🔍 Scanning current selection...');
+  await window.componentsModule.analyzeSelection();
+}
+
+/**
+ * Handle code generation request
+ * Uses code generation module
+ */
+async function handleGenerateCode(componentData) {
+  if (!window.codeGenModule) {
+    throw new Error('Code generation module not available');
+  }
+  
+  console.log('⚡ Generating code for component:', componentData.name);
+  
+  const code = await window.codeGenModule.generateSdsCode(componentData);
+  
+  figma.ui.postMessage({
+    type: 'code-generated',
+    code: code,
+    componentName: componentData.name
+  });
+}
+
+/**
+ * Handle node inspection request (Dev Mode)
+ * Uses Dev Mode module for detailed inspection
+ */
+async function handleInspectNode(nodeId) {
+  if (!window.devModeModule) {
+    throw new Error('Dev Mode module not available');
+  }
+  
+  console.log('🔍 Inspecting node:', nodeId);
+  
+  const details = await window.devModeModule.getNodeDetailsForInspection(nodeId);
+  
+  figma.ui.postMessage({
+    type: 'node-details',
+    details: details,
+    nodeId: nodeId
+  });
+}
+
+/**
+ * Handle node export request
+ * Uses Dev Mode module for export functionality
+ */
+async function handleExportNode(nodeId, format) {
+  if (!window.devModeModule) {
+    throw new Error('Dev Mode module not available');
+  }
+  
+  console.log('📤 Exporting node:', nodeId, 'format:', format);
+  
+  await window.devModeModule.exportNodeData(nodeId, format);
+}
+
+/**
+ * Handle get variables request
+ * Uses Variables API module
+ */
+async function handleGetVariables() {
+  if (!window.variablesModule) {
+    throw new Error('Variables module not available');
+  }
+  
+  console.log('📊 Getting design variables...');
+  
+  const variables = await window.variablesModule.getLocalVariables();
+  
+  figma.ui.postMessage({
+    type: 'variables-loaded',
+    variables: variables
+  });
+}
+
+/**
+ * Handle UI resize request
+ * Uses Dev Mode module for responsive sizing
+ */
+function handleResizeUI(width, height) {
+  if (window.devModeModule) {
+    window.devModeModule.resizeUIForDevMode(width, height);
+  } else {
+    figma.ui.resize(width, height);
+  }
+}
+
+/**
+ * Handle component hierarchy request
+ * Provides structured view of detected components
+ */
+async function handleGetComponentHierarchy() {
+  if (!window.componentsModule) {
+    throw new Error('Components module not available');
+  }
+  
+  const selection = figma.currentPage.selection;
+  
+  if (selection.length === 0) {
+    figma.ui.postMessage({
+      type: 'component-hierarchy',
+      hierarchy: [],
+      message: 'No selection to analyze'
+    });
+    return;
+  }
+  
+  console.log('🏗️ Building component hierarchy...');
+  
+  const results = await Promise.all(
+    selection.map(node => window.componentsModule.analyzeNodeAsync(node))
+  );
+  
+  const hierarchy = window.componentsModule.getComponentHierarchy(results);
+  
+  figma.ui.postMessage({
+    type: 'component-hierarchy',
+    hierarchy: hierarchy
+  });
+}
+
+/**
+ * Get component URL from configuration
+ * Uses centralized configuration instead of hardcoded values
+ */
+function getComponentUrl(componentType) {
+  if (window.sdsConfigModule && window.sdsConfigModule.isInitialized()) {
+    return window.sdsConfigModule.getDocumentUrl(componentType);
+  }
+  
+  console.warn('⚠️ Configuration not available, cannot get component URL for:', componentType);
+  return null;
+}
+
+/**
+ * Get all available component types from configuration
+ */
+function getAvailableComponentTypes() {
+  if (window.sdsConfigModule && window.sdsConfigModule.isInitialized()) {
+    return window.sdsConfigModule.getAvailableComponentTypes();
+  }
+  
+  return [];
+}
+
+/**
+ * Get import paths from configuration
+ */
+function getImportPaths() {
+  if (window.sdsConfigModule && window.sdsConfigModule.isInitialized()) {
+    return window.sdsConfigModule.getImportPaths();
+  }
+  
+  return {};
+}
+
+/**
+ * Legacy function mappings for backward compatibility
+ * Maintains compatibility with existing UI code
+ */
+function scanCurrentSelection() {
+  handleScanSelection().catch(error => {
+    console.error('❌ Error in scanCurrentSelection:', error);
+  });
+}
+
+function generateComponentCode(analysisResult) {
+  handleGenerateCode(analysisResult).catch(error => {
+    console.error('❌ Error in generateComponentCode:', error);
+  });
+}
+
+/**
+ * Error recovery and fallback handling
+ */
+function handlePluginError(error, context) {
+  console.error(`❌ Plugin error in ${context}:`, error);
+  
+  figma.ui.postMessage({
+    type: 'plugin-error',
+    error: error.message,
+    context: context,
+    timestamp: Date.now()
+  });
+}
+
+/**
+ * Plugin cleanup on close
+ */
+function cleanupPlugin() {
+  console.log('🧹 Cleaning up plugin resources...');
+  
+  // Clean up any listeners or resources
+  try {
+    // Remove selection listeners if needed
+    // figma.off('selectionchange', ...);
+    
+    console.log('✅ Plugin cleanup complete');
+  } catch (error) {
+    console.error('❌ Error during cleanup:', error);
+  }
+}
+
+/**
+ * Plugin health check
+ * Verifies all modules are properly loaded
+ */
+function performHealthCheck() {
+  const health = {
+    variables: !!window.variablesModule,
+    components: !!window.componentsModule,
+    codeGen: !!window.codeGenModule,
+    devMode: !!window.devModeModule,
+    figmaAPI: !!figma,
+    ui: !!figma.ui
+  };
+  
+  console.log('🏥 Plugin health check:', health);
+  
+  const isHealthy = Object.values(health).every(Boolean);
+  
+  figma.ui.postMessage({
+    type: 'health-check',
+    health: health,
+    isHealthy: isHealthy
+  });
+  
+  return isHealthy;
+}
+
+// ===== PLUGIN INITIALIZATION =====
+
+// Initialize the plugin when all modules are loaded
+if (typeof window !== 'undefined') {
+  // In Figma plugin environment
+  
+  // Wait for all modules to load, then initialize
+  setTimeout(() => {
+    performHealthCheck();
+    initializePlugin();
+  }, 100);
+  
+  // Handle plugin close
+  if (figma && figma.on) {
+    figma.on('close', cleanupPlugin);
+  }
+  
+} else {
+  // For Node.js/testing environment
+  module.exports = {
+    initializePlugin,
+    setupMessageHandlers,
+    handleScanSelection,
+    handleGenerateCode,
+    handleInspectNode,
+    performHealthCheck
+  };
+}
+
+console.log('📦 Main plugin module loaded');
