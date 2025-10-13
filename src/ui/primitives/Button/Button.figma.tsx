@@ -63,6 +63,10 @@ figma.connect(
   'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=185-852&m=dev',
   {
     props: {
+      Variant: figma.enum('Variant', {
+        Primary: 'danger-primary',
+        Subtle: 'danger-subtle',
+      }),
       Size: figma.enum('Size', {
         Small: 'small',
         Medium: 'medium',
@@ -81,6 +85,7 @@ figma.connect(
     example: props =>
       react`
         <ButtonDanger
+          variant=${props.Variant}
           size=${props.Size}
           ${props.State === 'disabled' ? 'isDisabled' : ''}
           data-state=${props.State}
@@ -99,11 +104,21 @@ figma.connect(
 figma.connect(
   'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=2072-9432&m=dev',
   {
-    example: () =>
+    props: {
+      Align: figma.enum('Align', {
+        Justify: 'justify',
+        Start: 'start',
+        End: 'end',
+        Center: 'center',
+      }),
+      ButtonStart: figma.boolean('Button Start'),
+      ButtonEnd: figma.boolean('Button End'),
+    },
+    example: props =>
       react`
-        <ButtonGroup>
-          <Button variant="primary">Primary</Button>
-          <Button variant="neutral">Secondary</Button>
+        <ButtonGroup align=${props.Align}>
+          ${props.ButtonStart ? react`<Button variant="primary">Start</Button>` : ''}
+          ${props.ButtonEnd ? react`<Button variant="neutral">End</Button>` : ''}
         </ButtonGroup>
       `,
   },
@@ -128,10 +143,7 @@ figma.connect(
         Hover: 'hover',
         Disabled: 'disabled',
       }),
-      HasIconStart: figma.boolean('Has Icon Start'),
-      HasIconEnd: figma.boolean('Has Icon End'),
-      IconStart: figma.string('Icon Start'),
-      IconEnd: figma.string('Icon End'),
+      Icon: figma.string('Icon'),
     },
     example: props =>
       react`
@@ -141,11 +153,7 @@ figma.connect(
           ${props.State === 'disabled' ? 'isDisabled' : ''}
           data-state=${props.State}
         >
-          ${props.HasIconStart ? react`<Icon />` : ''}
-          ${props.IconStart ? react`<Icon />` : ''}
-          ${''}
-          ${props.HasIconEnd ? react`<Icon />` : ''}
-          ${props.IconEnd ? react`<Icon />` : ''}
+          ${props.Icon ? react`<Icon />` : ''}
         </Button>
       `,
   },
