@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "private": true, 
+  "private": true,
   "version": "1.2.1",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "app:lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "app:preview": "vite preview",
     "storybook": "storybook dev -p 6006 --no-open",
-    "storybook:build": "storybook build --output-dir dist/storybook",
+    "build-storybook": "storybook build --output-dir dist/storybook",
     "build": "npm run app:build; npm run storybook:build",
     "script:dev-resources": "cd scripts/dev-resources; node --env-file=../../.env app.mjs; cd -;",
     "script:icons": "cd scripts/icons; node --env-file=../../.env app.mjs --skip-rest-api; cd -;",
@@ -22,7 +22,8 @@
     "figma:connect:create": "figma connect create",
     "figma:connect:publish": "figma connect publish",
     "figma:connect:validate": "figma connect validate",
-    "figma:connect:list": "figma connect list"
+    "figma:connect:list": "figma connect list",
+    "chromatic": "npx chromatic --project-token=chpt_830957d50b69bcc"
   },
   "prettier": {
     "plugins": [
