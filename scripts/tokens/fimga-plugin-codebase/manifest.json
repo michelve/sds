@@ -3,8 +3,8 @@
   "id": "sds-code-generator",
   "api": "1.0.0",
   "main": "code.js",
-  "editorType": ["dev"],
-  "capabilities": ["codegen", "vscode"],
+  "editorType": ["dev","figma", "dev"],
+  "capabilities": ["codegen", "inspect", "vscode"],
   "codegenLanguages": [
     {
       "label": "React",

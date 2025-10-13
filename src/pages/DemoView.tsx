@@ -1,43 +1,33 @@
-import { Hero, FormBox } from "compositions";
-import { ButtonGroup, Button, TextareaField, InputField, TextContentTitle } from "primitives";
+import { Hero } from 'compositions';
+import { FormBox } from 'compositions';
+import { InputField } from 'primitives';
+import { Button } from 'primitives';
+import { TextContentTitle } from 'primitives';
 
-export function DemoView() {
-  return (
-    <>
-      
-      <Hero variant="subtle">
-        <TextContentTitle
-          align="center"
-          title="Demo View"
-          subtitle="Test your components here"
-        />
-        <FormBox onSubmit={() => {}}>
-          <InputField
-            label="Name"
-            placeholder="Enter your name"
-          />
-          <InputField
-            label="Surname"
-            placeholder="Enter your surname"
-          />
-          <InputField
-            label="Email"
-            placeholder="Enter your email"
-          />
-          <TextareaField
-            label="Message"
-            placeholder="Enter your message"
-          />
-          <ButtonGroup align="justify">
-            <Button
-              onPress={() => {}}
-              variant="primary"
-            >
-              Submit
-            </Button>
-          </ButtonGroup>
-        </FormBox>
-      </Hero>
-    </>
-  );
-}
+const DemoView = () => {
+    return (
+<Hero variant="subtle">
+    <TextContentTitle
+        align="center"
+        title="Title"
+        subtitle="Subtitle"
+    />
+    <ButtonGroup align="justify">
+        <Button
+            onPress={() => {}}
+            variant="neutral"
+        >
+            Button
+        </Button>
+        <Button
+            onPress={() => {}}
+            variant="primary"
+        >
+            Button
+        </Button>
+    </ButtonGroup>
+</Hero>
+);
+};
+
+export default DemoView;
