@@ -25,27 +25,34 @@ figma.connect(
         Neutral: 'neutral',
         Subtle: 'subtle',
       }),
+      State: figma.enum('State', {
+        Default: 'default',
+        Hover: 'hover',
+        Disabled: 'disabled',
+      }),
       Size: figma.enum('Size', {
         Small: 'small',
         Medium: 'medium',
       }),
       Label: figma.string('Label'),
-      // Optional link behavior (Button can render an anchor when href is set)
-      Href: figma.string('Href'),
-      // Optional aria-label if you support it
-      AriaLabel: figma.string('Aria Label'),
-      Disabled: figma.boolean('Disabled'),
+      HasIconStart: figma.boolean('Has Icon Start'),
+      HasIconEnd: figma.boolean('Has Icon End'),
+      IconStart: figma.string('Icon Start'),
+      IconEnd: figma.string('Icon End'),
     },
     example: props =>
       react`
         <Button
           variant=${props.Variant}
           size=${props.Size}
-          ${props.Disabled ? 'isDisabled' : ''}
-          ${props.Href ? `href="${props.Href}"` : ''}
-          ${props.AriaLabel ? `aria-label="${props.AriaLabel}"` : ''}
+          ${props.State === 'disabled' ? 'isDisabled' : ''}
+          data-state=${props.State}
         >
+          ${props.HasIconStart ? react`<Icon />` : ''}
+          ${props.IconStart ? react`<Icon />` : ''}
           ${props.Label}
+          ${props.HasIconEnd ? react`<Icon />` : ''}
+          ${props.IconEnd ? react`<Icon />` : ''}
         </Button>
       `,
   },
@@ -60,20 +67,29 @@ figma.connect(
         Small: 'small',
         Medium: 'medium',
       }),
+      State: figma.enum('State', {
+        Default: 'default',
+        Hover: 'hover',
+        Disabled: 'disabled',
+      }),
       Label: figma.string('Label'),
-      Href: figma.string('Href'),
-      AriaLabel: figma.string('Aria Label'),
-      Disabled: figma.boolean('Disabled'),
+      HasIconStart: figma.boolean('Has Icon Start'),
+      HasIconEnd: figma.boolean('Has Icon End'),
+      IconStart: figma.string('Icon Start'),
+      IconEnd: figma.string('Icon End'),
     },
     example: props =>
       react`
         <ButtonDanger
           size=${props.Size}
-          ${props.Disabled ? 'isDisabled' : ''}
-          ${props.Href ? `href="${props.Href}"` : ''}
-          ${props.AriaLabel ? `aria-label="${props.AriaLabel}"` : ''}
+          ${props.State === 'disabled' ? 'isDisabled' : ''}
+          data-state=${props.State}
         >
+          ${props.HasIconStart ? react`<Icon />` : ''}
+          ${props.IconStart ? react`<Icon />` : ''}
           ${props.Label}
+          ${props.HasIconEnd ? react`<Icon />` : ''}
+          ${props.IconEnd ? react`<Icon />` : ''}
         </ButtonDanger>
       `,
   },
@@ -83,24 +99,11 @@ figma.connect(
 figma.connect(
   'https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=2072-9432&m=dev',
   {
-    props: {
-      Align: figma.enum('Align', {
-        Start: 'start',
-        End: 'end',
-        Center: 'center',
-        Justify: 'justify',
-        Stack: 'stack',
-      }),
-      PrimaryLabel: figma.string('Primary Label'),
-      SecondaryLabel: figma.string('Secondary Label'),
-      DisabledPrimary: figma.boolean('Primary Disabled'),
-      DisabledSecondary: figma.boolean('Secondary Disabled'),
-    },
-    example: props =>
+    example: () =>
       react`
-        <ButtonGroup align=${props.Align}>
-          <Button variant="primary" ${props.DisabledPrimary ? 'isDisabled' : ''}>${props.PrimaryLabel}</Button>
-          <Button variant="neutral" ${props.DisabledSecondary ? 'isDisabled' : ''}>${props.SecondaryLabel}</Button>
+        <ButtonGroup>
+          <Button variant="primary">Primary</Button>
+          <Button variant="neutral">Secondary</Button>
         </ButtonGroup>
       `,
   },
@@ -120,21 +123,29 @@ figma.connect(
         Small: 'small',
         Medium: 'medium',
       }),
-      Label: figma.string('Label'),
-      IconName: figma.string('Icon Name'), // name of the icon component to render
-      Disabled: figma.boolean('Disabled'),
-      AriaLabel: figma.string('Aria Label'),
+      State: figma.enum('State', {
+        Default: 'default',
+        Hover: 'hover',
+        Disabled: 'disabled',
+      }),
+      HasIconStart: figma.boolean('Has Icon Start'),
+      HasIconEnd: figma.boolean('Has Icon End'),
+      IconStart: figma.string('Icon Start'),
+      IconEnd: figma.string('Icon End'),
     },
     example: props =>
       react`
         <Button
           variant=${props.Variant}
           size=${props.Size}
-          ${props.Disabled ? 'isDisabled' : ''}
-          ${props.AriaLabel ? `aria-label="${props.AriaLabel}"` : ''}
+          ${props.State === 'disabled' ? 'isDisabled' : ''}
+          data-state=${props.State}
         >
-          ${props.IconName ? react`<Icon name="${props.IconName}" />` : ''}
-          ${props.Label}
+          ${props.HasIconStart ? react`<Icon />` : ''}
+          ${props.IconStart ? react`<Icon />` : ''}
+          ${''}
+          ${props.HasIconEnd ? react`<Icon />` : ''}
+          ${props.IconEnd ? react`<Icon />` : ''}
         </Button>
       `,
   },
