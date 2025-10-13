@@ -13,12 +13,15 @@ type TextLineHeightProps = { lineHeight?: "body" | "single" };
 
 type TextTruncateProps = { lineClamp?: number };
 
-export type TextProps = TextTruncateProps & RACTextProps & TextLineHeightProps;
+export type TextProps = TextTruncateProps & RACTextProps & TextLineHeightProps & {
+  color?: "default" | "subtle" | "brand" | "danger" | "positive" | "warning";
+};
 export function Text({
   className,
   elementType = "p",
   lineHeight = "body",
   lineClamp,
+  color = "default",
   ...props
 }: TextProps) {
   const classNames = clsx(
@@ -26,6 +29,7 @@ export function Text({
     !!lineClamp && "text-truncate",
     "text-body-base",
     `text-line-height-${lineHeight}`,
+    color !== "default" && `text-color-${color}`,
   );
   const style = lineClamp
     ? { "--text-truncate-line-clamp": lineClamp }
@@ -219,17 +223,21 @@ export function TextSubtitle({
     />
   );
 }
-export type TextHeadingProps = TextTruncateProps & RACTextProps;
+export type TextHeadingProps = TextTruncateProps & RACTextProps & {
+  color?: "default" | "subtle" | "brand" | "danger" | "positive" | "warning";
+};
 export function TextHeading({
   className,
   elementType = "h3",
   lineClamp,
+  color = "default",
   ...props
 }: TextHeadingProps) {
   const classNames = clsx(
     className,
     !!lineClamp && "text-truncate",
     "text-heading",
+    color !== "default" && `text-color-${color}`,
   );
   const style = lineClamp
     ? { "--text-truncate-line-clamp": lineClamp }
@@ -367,15 +375,21 @@ export type TextContentTitleProps = ComponentPropsWithoutRef<"div"> & {
   align?: "start" | "center";
   title: ReactNode;
   subtitle?: ReactNode;
+  color?: "default" | "subtle" | "brand" | "danger" | "positive" | "warning";
 };
 export function TextContentTitle({
   align = "start",
   className,
   title,
   subtitle,
+  color = "default",
   ...props
 }: TextContentTitleProps) {
-  const classNames = clsx(className, "text-content-title");
+  const classNames = clsx(
+    className,
+    "text-content-title",
+    color !== "default" && `text-color-${color}`,
+  );
   const { isMobile } = useMediaQuery();
   return (
     <Flex direction="column" gap="200" className={classNames} {...props}>

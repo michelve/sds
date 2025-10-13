@@ -156,3 +156,24 @@
   -webkit-line-clamp: var(--text-truncate-line-clamp, 9999);
   line-clamp: var(--text-truncate-line-clamp, 9999);
 }
+
+/* Text color variants */
+.text-color-subtle {
+  color: var(--sds-color-text-default-secondary);
+}
+
+.text-color-brand {
+  color: var(--sds-color-text-brand);
+}
+
+.text-color-danger {
+  color: var(--sds-color-text-danger);
+}
+
+.text-color-positive {
+  color: var(--sds-color-text-positive);
+}
+
+.text-color-warning {
+  color: var(--sds-color-text-warning);
+}

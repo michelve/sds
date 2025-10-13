@@ -32,16 +32,36 @@ figma.connect(TextSubtitle, "<FIGMA_TEXT_TEXT_SUBTITLE>", {
   example: ({ text }) => <TextSubtitle>{text}</TextSubtitle>,
 });
 figma.connect(TextHeading, "<FIGMA_TEXT_TEXT_HEADING>", {
-  props: { text: figma.string("Text") },
-  example: ({ text }) => <TextHeading>{text}</TextHeading>,
+  props: {
+    text: figma.string("Text"),
+    color: figma.enum("Color", {
+      Default: "default",
+      Subtle: "subtle",
+      Brand: "brand",
+      Danger: "danger",
+      Positive: "positive",
+      Warning: "warning",
+    }),
+  },
+  example: ({ text, color }) => <TextHeading color={color}>{text}</TextHeading>,
 });
 figma.connect(TextSubheading, "<FIGMA_TEXT_TEXT_SUBHEADING>", {
   props: { text: figma.string("Text") },
   example: ({ text }) => <TextSubheading>{text}</TextSubheading>,
 });
 figma.connect(Text, "<FIGMA_TEXT_TEXT>", {
-  props: { text: figma.string("Text") },
-  example: ({ text }) => <Text>{text}</Text>,
+  props: {
+    text: figma.string("Text"),
+    color: figma.enum("Color", {
+      Default: "default",
+      Subtle: "subtle",
+      Brand: "brand",
+      Danger: "danger",
+      Positive: "positive",
+      Warning: "warning",
+    }),
+  },
+  example: ({ text, color }) => <Text color={color}>{text}</Text>,
 });
 figma.connect(TextEmphasis, "<FIGMA_TEXT_TEXT_EMPHASIS>", {
   props: { text: figma.string("Text") },
@@ -126,9 +146,20 @@ figma.connect(TextContentHeading, "<FIGMA_TEXT_TEXT_CONTENT_HEADING>", {
 
 figma.connect(TextContentTitle, "<FIGMA_TEXT_TEXT_CONTENT_TITLE>", {
   props: {
-    align: figma.enum("Align", { Center: "center" }),
+    align: figma.enum("Align", { 
+      Center: "center",
+      Start: "start",
+    }),
     title: figma.string("Title"),
     subtitle: figma.string("Subtitle"),
+    color: figma.enum("Color", {
+      Default: "default",
+      Subtle: "subtle",
+      Brand: "brand",
+      Danger: "danger",
+      Positive: "positive",
+      Warning: "warning",
+    }),
   },
   example: ({ ...props }) => <TextContentTitle {...props} />,
 });

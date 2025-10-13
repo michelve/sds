@@ -1,25 +1,18 @@
-import { Footer, Header } from "compositions";
 import { AllProviders } from "data";
-import { Demo } from "./examples/Demo";
-import { FAQs } from "./examples/FAQs";
-import { PanelSections } from "./examples/PanelSections";
-import { PricingGrid } from "./examples/PricingGrid";
-import { ProductDetails } from "./examples/ProductDetails";
-import { ProductGrid } from "./examples/ProductGrid";
-import { WelcomeHero } from "./examples/WelcomeHero";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ComponentShowcase } from "./examples/ComponentShowcase";
+import { Playground } from "./examples/Playground";
 
 function App() {
   return (
     <AllProviders>
-      <Header />
-      <Demo />
-      <WelcomeHero />
-      <PanelSections />
-      <PricingGrid />
-      <FAQs />
-      <ProductDetails />
-      <ProductGrid />
-      <Footer />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<ComponentShowcase />} />
+          <Route path="/demo" element={<Playground />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
     </AllProviders>
   );
 }
