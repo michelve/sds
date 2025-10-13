@@ -321,7 +321,7 @@ async function getNodeDetailsForInspection(nodeId) {
       
       // Variables (if supported)
       boundVariables: DevModeConfig.supportsVariables ? 
-        await window.variablesModule?.getBoundVariables(node) : null,
+        (window.variablesModule && await window.variablesModule.getBoundVariables(node)) : null,
       
       // Component information
       componentProperties: node.componentProperties,

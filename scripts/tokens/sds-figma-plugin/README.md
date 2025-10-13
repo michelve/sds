@@ -1,6 +1,22 @@
-# SDS Figma Plugin
+# SDS Figma Plugin - Code Connect Integration
 
-A modular Figma plugin that analyzes selected components and generates corresponding React Native code using the Simple Design System (SDS) architecture. Built following Figma development best practices with proper Variables API integration and Dev Mode support.
+⚡ **UPDATED**: Now uses **Code Connect mappings** instead of hardcoded component detection patterns!
+
+A modular Figma plugin that analyzes selected components and generates corresponding React code using the Simple Design System (SDS) architecture. Built following Figma development best practices with **Code Connect integration** for accurate component detection.
+
+## 🎯 Code Connect Integration
+
+### ✅ What's New
+- **Code Connect Detection**: Uses existing `documentUrlSubstitutions` from `figma.config.json`
+- **Accurate Mapping**: Maps Figma node IDs to actual SDS components
+- **Dynamic Configuration**: No more hardcoded detection patterns
+- **Higher Confidence**: Exact matches via Code Connect URLs
+
+### 🔧 Architecture Changes
+- **New Module**: `modules/codeConnect.js` - Code Connect detector class
+- **Updated Main**: `code-modular-connect.js` - New main file with Code Connect integration
+- **Fixed Syntax**: Removed optional chaining operators (`?.`) for Figma compatibility
+- **Modular Design**: Cleaner separation between detection, generation, and configuration
 
 ## 🚀 Features
 

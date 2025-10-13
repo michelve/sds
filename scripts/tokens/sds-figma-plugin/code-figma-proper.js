@@ -1,17 +1,18 @@
-// ===== SDS FIGMA PLUGIN - PROPER FIGMA EXECUTION MODEL =====
-// Main plugin file following Figma's recommended patterns
+// ===== SDS FIGMA PLUGIN - CODE CONNECT INTEGRATION =====
+// Main plugin file using Code Connect mappings instead of hardcoded detection
 // Runs in the main thread sandbox (not iframe) - no DOM/browser APIs available
 
-console.log('🚀 SDS Component Scanner starting in main thread');
+console.log('🚀 SDS Component Scanner starting with Code Connect integration');
 
-// ===== FIGMA PLUGIN LIFECYCLE =====
+// ===== GLOBAL PLUGIN STATE =====
 
-// Global state for the plugin
 let isInitialized = false;
 let currentDevMode = false;
+let configManager = null;
+let codeConnectDetector = null;
 
 /**
- * Initialize the plugin following Figma's execution model
+ * Initialize the plugin with Code Connect integration
  */
 async function initializePlugin() {
   if (isInitialized) {
@@ -20,11 +21,19 @@ async function initializePlugin() {
   }
 
   try {
-    console.log('🔧 Initializing SDS Component Scanner...');
+    console.log('🔧 Initializing SDS Code Connect integration...');
     
     // Check if we're in dev mode
     currentDevMode = figma.editorType === 'dev';
     console.log(`📍 Editor type: ${figma.editorType}`);
+    
+    // Initialize configuration manager
+    configManager = new window.SDSConfigurationManager();
+    await configManager.initialize();
+    
+    // Initialize Code Connect detector
+    codeConnectDetector = new window.SDSCodeConnectDetector(configManager);
+    console.log('✅ Code Connect detector initialized');
     
     // Load any required fonts for text manipulation
     try {
@@ -34,288 +43,10 @@ async function initializePlugin() {
       console.warn('⚠️ Could not load Inter font, using system default');
     }
 
-    // Set up the UI with proper theme support
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>SDS Component Scanner</title>
-        <meta charset="utf-8">
-        <style>
-          body {
-            font-family: var(--figma-color-text, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
-            font-size: 12px;
-            line-height: 1.5;
-            margin: 0;
-            padding: 16px;
-            background: var(--figma-color-bg, #ffffff);
-            color: var(--figma-color-text, #000000);
-            min-height: 100vh;
-          }
-          .container {
-            max-width: 400px;
-            margin: 0 auto;
-          }
-          .header {
-            background: var(--figma-color-bg-secondary, #f5f5f5);
-            border: 1px solid var(--figma-color-border, #e6e6e6);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 16px;
-            text-align: center;
-          }
-          .header h1 {
-            margin: 0 0 8px 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--figma-color-text, #000000);
-          }
-          .header p {
-            margin: 0;
-            color: var(--figma-color-text-secondary, #666666);
-            font-size: 11px;
-          }
-          .status {
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin: 8px 0;
-            font-weight: 500;
-            font-size: 11px;
-          }
-          .success { 
-            background: var(--figma-color-bg-success-tertiary, #cff7d3); 
-            color: var(--figma-color-text-success, #009951);
-            border: 1px solid var(--figma-color-border-success, #aff4c6);
-          }
-          .error { 
-            background: var(--figma-color-bg-danger-tertiary, #ffe2e0); 
-            color: var(--figma-color-text-danger, #dc3412);
-            border: 1px solid var(--figma-color-border-danger, #ffc7c2);
-          }
-          .warning { 
-            background: var(--figma-color-bg-warning-tertiary, #fff1c2); 
-            color: var(--figma-color-text-warning, #b86200);
-            border: 1px solid var(--figma-color-border-warning, #ffe8a3);
-          }
-          .info { 
-            background: var(--figma-color-bg-selected-tertiary, #f2f9ff); 
-            color: var(--figma-color-text-brand, #007be5);
-            border: 1px solid var(--figma-color-border-brand, #bde3ff);
-          }
-          button {
-            background: var(--figma-color-bg-brand, #007bff);
-            color: var(--figma-color-text-onbrand, #ffffff);
-            border: none;
-            padding: 10px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            margin: 4px;
-            font-weight: 500;
-          }
-          button:hover:not(:disabled) {
-            background: var(--figma-color-bg-brand-hover, #0056b3);
-          }
-          button:disabled {
-            background: var(--figma-color-bg-disabled, #d9d9d9);
-            color: var(--figma-color-text-disabled, #666666);
-            cursor: not-allowed;
-          }
-          .panel {
-            background: var(--figma-color-bg, #ffffff);
-            border: 1px solid var(--figma-color-border, #e6e6e6);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-          }
-          .panel h3 {
-            margin: 0 0 12px 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--figma-color-text, #000000);
-          }
-          .selection-info {
-            background: var(--figma-color-bg-secondary, #f5f5f5);
-            border: 1px solid var(--figma-color-border, #e6e6e6);
-            border-radius: 4px;
-            padding: 12px;
-            margin: 8px 0;
-            font-size: 11px;
-          }
-          .log-container {
-            max-height: 200px;
-            overflow-y: auto;
-            background: var(--figma-color-bg-inverse, #2c2c2c);
-            color: var(--figma-color-text-oninverse, #ffffff);
-            padding: 12px;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
-            font-size: 10px;
-            line-height: 1.4;
-            margin: 8px 0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>🎯 SDS Component Scanner</h1>
-            <p>Select components to generate SDS-ready code</p>
-          </div>
-
-          <div class="panel">
-            <h3>📊 Plugin Status</h3>
-            <div id="plugin-status">
-              <div class="status info">Plugin initializing...</div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h3>🎨 Current Selection</h3>
-            <div id="selection-info" class="selection-info">
-              No components selected
-            </div>
-            <button id="scan-button" onclick="scanSelection()" disabled>
-              Scan Selection
-            </button>
-          </div>
-
-          <div class="panel">
-            <h3>📋 Results</h3>
-            <div id="results"></div>
-          </div>
-
-          <div class="panel">
-            <h3>🔍 Debug Log</h3>
-            <button onclick="clearLog()">Clear Log</button>
-            <div id="console-log" class="log-container"></div>
-          </div>
-        </div>
-
-        <script>
-          console.log('🎨 UI script starting...');
-          
-          // Global state
-          let isPluginReady = false;
-          let currentSelection = [];
-          
-          // Enhanced console logging
-          const originalLog = console.log;
-          const originalWarn = console.warn;
-          const originalError = console.error;
-          
-          function appendToLog(message, type = 'log') {
-            const logContainer = document.getElementById('console-log');
-            const timestamp = new Date().toLocaleTimeString();
-            const logLine = document.createElement('div');
-            logLine.style.color = type === 'error' ? '#ff6b6b' : type === 'warn' ? '#ffd93d' : '#ffffff';
-            logLine.textContent = '[' + timestamp + '] ' + message;
-            logContainer.appendChild(logLine);
-            logContainer.scrollTop = logContainer.scrollHeight;
-          }
-          
-          console.log = function(...args) {
-            originalLog.apply(console, args);
-            appendToLog(args.join(' '), 'log');
-          };
-          
-          console.warn = function(...args) {
-            originalWarn.apply(console, args);
-            appendToLog(args.join(' '), 'warn');
-          };
-          
-          console.error = function(...args) {
-            originalError.apply(console, args);
-            appendToLog(args.join(' '), 'error');
-          };
-          
-          function clearLog() {
-            document.getElementById('console-log').innerHTML = '';
-          }
-          
-          function updatePluginStatus(status, type = 'info') {
-            const statusElement = document.getElementById('plugin-status');
-            statusElement.innerHTML = '<div class="status ' + type + '">' + status + '</div>';
-          }
-          
-          function updateSelectionInfo(selection) {
-            const selectionInfo = document.getElementById('selection-info');
-            const scanButton = document.getElementById('scan-button');
-            
-            if (!selection || selection.length === 0) {
-              selectionInfo.textContent = 'No components selected';
-              scanButton.disabled = true;
-            } else {
-              selectionInfo.textContent = 'Selected: ' + selection.length + ' item(s)';
-              scanButton.disabled = !isPluginReady;
-            }
-          }
-          
-          function scanSelection() {
-            if (!isPluginReady) {
-              console.warn('⚠️ Plugin not ready for scanning');
-              return;
-            }
-            
-            console.log('🔍 Requesting selection scan...');
-            parent.postMessage({ 
-              pluginMessage: { 
-                type: 'scan-selection',
-                timestamp: Date.now()
-              } 
-            }, '*');
-          }
-          
-          // Message handling from main thread
-          window.addEventListener('message', (event) => {
-            const message = event.data.pluginMessage;
-            if (!message) return;
-            
-            console.log('📨 Received:', message.type);
-            
-            switch (message.type) {
-              case 'plugin-ready':
-                isPluginReady = true;
-                updatePluginStatus('✅ Plugin ready', 'success');
-                updateSelectionInfo(currentSelection);
-                break;
-                
-              case 'selection-changed':
-                currentSelection = message.selection || [];
-                updateSelectionInfo(currentSelection);
-                break;
-                
-              case 'scan-result':
-                const results = document.getElementById('results');
-                if (message.data) {
-                  results.innerHTML = '<div class="status success">✅ Scan complete</div><pre>' + JSON.stringify(message.data, null, 2) + '</pre>';
-                } else {
-                  results.innerHTML = '<div class="status warning">⚠️ No components found</div>';
-                }
-                break;
-                
-              case 'error':
-                console.error('❌ Plugin error:', message.error);
-                updatePluginStatus('❌ Error: ' + message.error, 'error');
-                break;
-                
-              default:
-                console.log('📬 Unknown message type:', message.type);
-            }
-          });
-          
-          // Initialize UI
-          updatePluginStatus('⏳ Waiting for plugin...', 'info');
-          console.log('✅ UI initialized');
-        </script>
-      </body>
-      </html>
-    `;
-
-    // Show UI with theme support
-    figma.showUI(htmlContent, { 
-      width: 480, 
-      height: 720,
+    // Show UI with our external HTML file
+    figma.showUI(__html__, { 
+      width: 360, 
+      height: 480,
       themeColors: true  // Enable Figma CSS variables
     });
 
@@ -326,15 +57,245 @@ async function initializePlugin() {
     figma.ui.onmessage = handleUIMessage;
 
     isInitialized = true;
-    console.log('✅ Plugin initialization complete');
+    console.log('✅ SDS Plugin initialized successfully');
     
-    // Notify UI that plugin is ready
+    // Send initialization success to UI
     figma.ui.postMessage({
       type: 'plugin-ready',
-      devMode: currentDevMode
+      message: 'SDS Code Connect integration ready'
+    });
+
+  } catch (error) {
+    console.error('❌ Plugin initialization failed:', error);
+    figma.ui.postMessage({
+      type: 'error',
+      error: error.message
+    });
+  }
+}
+
+/**
+ * Handle selection changes
+ */
+function handleSelectionChange() {
+  const selection = figma.currentPage.selection;
+  console.log(`📍 Selection changed: ${selection.length} items selected`);
+  
+  // Send selection info to UI
+  figma.ui.postMessage({
+    type: 'selection-changed',
+    count: selection.length
+  });
+}
+
+/**
+ * Handle messages from UI
+ */
+async function handleUIMessage(message) {
+  try {
+    console.log('📨 Received UI message:', message.type);
+    
+    switch (message.type) {
+      case 'scan-selection':
+        await handleScanSelection();
+        break;
+        
+      case 'generate-code':
+        await handleGenerateCode(message.componentData);
+        break;
+        
+      default:
+        console.warn('⚠️ Unknown UI message type:', message.type);
+    }
+  } catch (error) {
+    console.error('❌ Error handling UI message:', error);
+    figma.ui.postMessage({
+      type: 'error',
+      error: error.message
+    });
+  }
+}
+
+/**
+ * Handle scan selection request using Code Connect detection
+ */
+async function handleScanSelection() {
+  const selection = figma.currentPage.selection;
+  
+  if (selection.length === 0) {
+    figma.ui.postMessage({
+      type: 'no-selection',
+      message: 'Please select one or more elements in Figma first'
+    });
+    return;
+  }
+
+  console.log(`🔍 Scanning ${selection.length} selected items with Code Connect...`);
+  
+  try {
+    // Use Code Connect detector to analyze selection
+    const results = [];
+    
+    for (const node of selection) {
+      const detectedComponents = await codeConnectDetector.detectComponents(node);
+      
+      if (detectedComponents.length > 0) {
+        results.push({
+          id: node.id,
+          name: node.name,
+          type: node.type,
+          components: detectedComponents.map(result => ({
+            component: result.mapping.component,
+            type: result.mapping.type,
+            import: result.mapping.import,
+            path: result.mapping.path,
+            props: result.mapping.props || [],
+            confidence: result.confidence,
+            source: result.source,
+            codeConnectKey: result.mapping.key
+          }))
+        });
+      }
+    }
+
+    console.log(`✅ Found ${results.length} mappable components`);
+    
+    // Send results to UI
+    figma.ui.postMessage({
+      type: 'analysis-complete',
+      results: results,
+      message: `Found ${results.length} SDS components using Code Connect mappings`
     });
     
-    // Send initial selection
+  } catch (error) {
+    console.error('❌ Error during scan:', error);
+    figma.ui.postMessage({
+      type: 'error',
+      error: error.message
+    });
+  }
+}
+
+/**
+ * Generate SDS-ready code using Code Connect mappings
+ */
+async function handleGenerateCode(componentData) {
+  try {
+    console.log('🎯 Generating code for components:', componentData);
+    
+    const code = generateSDSCodeFromComponents(componentData);
+    
+    figma.ui.postMessage({
+      type: 'code-generated',
+      code: code
+    });
+    
+  } catch (error) {
+    console.error('❌ Error generating code:', error);
+    figma.ui.postMessage({
+      type: 'error',
+      error: error.message
+    });
+  }
+}
+
+/**
+ * Generate SDS code from detected components using Code Connect mappings
+ */
+function generateSDSCodeFromComponents(componentData) {
+  if (!componentData || componentData.length === 0) {
+    return '// No components selected or detected';
+  }
+
+  // Generate imports based on detected components
+  const imports = new Set();
+  const codeSegments = [];
+
+  componentData.forEach(item => {
+    if (item.components && item.components.length > 0) {
+      item.components.forEach(comp => {
+        // Add import
+        imports.add(comp.import);
+        
+        // Generate component usage
+        const props = generatePropsFromNode(comp);
+        codeSegments.push(`        <${comp.component}${props}>${getComponentChildren(comp)}</${comp.component}>`);
+      });
+    }
+  });
+
+  // Build final code
+  let code = '// Generated SDS Code using Code Connect mappings\n';
+  code += 'import React from "react";\n';
+  
+  // Add unique imports
+  for (const importStatement of imports) {
+    code += importStatement + '\n';
+  }
+  
+  code += 'import { Flex, Section } from "layout";\n\n';
+  code += 'export default function GeneratedComponent() {\n';
+  code += '  return (\n';
+  code += '    <Section padding="600">\n';
+  code += '      <Flex direction="column" gap="400">\n';
+  
+  codeSegments.forEach(segment => {
+    code += segment + '\n';
+  });
+  
+  code += '      </Flex>\n';
+  code += '    </Section>\n';
+  code += '  );\n';
+  code += '}\n';
+  
+  return code;
+}
+
+/**
+ * Generate props string for a component
+ */
+function generatePropsFromNode(component) {
+  const props = [];
+  
+  // Add default props based on component type
+  switch (component.type) {
+    case 'button':
+      props.push('variant="primary"');
+      break;
+    case 'input':
+      props.push('placeholder="Enter text"');
+      break;
+    case 'card':
+      props.push('title="Card Title"');
+      break;
+  }
+  
+  return props.length > 0 ? ' ' + props.join(' ') : '';
+}
+
+/**
+ * Get children content for a component
+ */
+function getComponentChildren(component) {
+  switch (component.type) {
+    case 'button':
+      return 'Button Text';
+    case 'text':
+      return 'Text Content';
+    case 'input':
+      return '';
+    default:
+      return component.component.includes('Text') ? 'Text Content' : '';
+  }
+}
+
+// ===== PLUGIN LIFECYCLE =====
+
+// Initialize when plugin starts
+initializePlugin();
+    console.log('✅ Plugin initialization complete');
+    
+    // Send initial selection to UI
     handleSelectionChange();
 
   } catch (error) {
@@ -372,8 +333,17 @@ async function handleUIMessage(message) {
   
   try {
     switch (message.type) {
+      case 'get-selection':
+        // Send current selection to UI
+        handleSelectionChange();
+        break;
+        
       case 'scan-selection':
         await handleScanSelection();
+        break;
+        
+      case 'generate-code':
+        await handleGenerateCode(message.componentData);
         break;
         
       default:
@@ -389,6 +359,62 @@ async function handleUIMessage(message) {
 }
 
 /**
+ * Generate SDS-ready code from selection
+ */
+function generateSDSCode(selection) {
+  if (!selection || selection.length === 0) {
+    return '// No components selected';
+  }
+
+  let code = '// Generated SDS Code\n';
+  code += 'import React from "react";\n';
+  code += 'import { Button, Text, Flex, Section } from "ui/primitives";\n\n';
+  
+  code += 'export default function GeneratedComponent() {\n';
+  code += '  return (\n';
+  code += '    <Section padding="600">\n';
+  code += '      <Flex direction="column" gap="400">\n';
+  
+  for (let i = 0; i < selection.length; i++) {
+    const node = selection[i];
+    code += generateNodeCode(node, '        ');
+  }
+  
+  code += '      </Flex>\n';
+  code += '    </Section>\n';
+  code += '  );\n';
+  code += '}\n';
+  
+  return code;
+}
+
+/**
+ * Generate code for individual node
+ */
+function generateNodeCode(node, indent = '') {
+  switch (node.type) {
+    case 'TEXT':
+      return `${indent}<Text>${node.characters || 'Text Content'}</Text>\n`;
+    
+    case 'RECTANGLE':
+    case 'FRAME':
+      if (node.name.toLowerCase().includes('button')) {
+        return `${indent}<Button variant="primary">${node.name}</Button>\n`;
+      }
+      return `${indent}<div className="frame">{/* ${node.name} */}</div>\n`;
+    
+    case 'COMPONENT':
+    case 'INSTANCE': {
+      const componentName = node.name.replace(/\s+/g, '');
+      return `${indent}<${componentName} />\n`;
+    }
+    
+    default:
+      return `${indent}{/* ${node.type}: ${node.name} */}\n`;
+  }
+}
+
+/**
  * Handle scan selection request
  */
 async function handleScanSelection() {
@@ -396,7 +422,7 @@ async function handleScanSelection() {
   
   if (selection.length === 0) {
     figma.ui.postMessage({
-      type: 'scan-result',
+      type: 'analysis-complete',
       data: null
     });
     return;
@@ -404,65 +430,83 @@ async function handleScanSelection() {
 
   console.log(`🔍 Scanning ${selection.length} selected items...`);
   
-  // Basic component analysis
-  const results = {
-    components: [],
-    variables: {},
-    metadata: {
-      scanTime: new Date().toISOString(),
-      itemCount: selection.length,
-      devMode: currentDevMode
-    }
-  };
-
+  // Analyze each selected node
+  const results = [];
+  
   for (const node of selection) {
     try {
       // Basic node analysis
-      const component = {
+      const analysisResult = {
         id: node.id,
         name: node.name,
         type: node.type,
-        properties: {},
-        suggestions: []
+        detectedComponents: [],
+        properties: {}
       };
 
-      // Analyze based on node type
+      // Component detection based on node properties
       if (node.type === 'COMPONENT' || node.type === 'INSTANCE') {
-        component.suggestions.push('This is a component or instance - consider mapping to SDS component');
-        component.properties.isComponent = true;
+        analysisResult.detectedComponents.push({
+          component: 'Component',
+          type: 'component',
+          path: 'src/ui/primitives/Component',
+          import: "import { Component } from 'primitives';"
+        });
       }
 
       if (node.type === 'TEXT') {
-        component.suggestions.push('Text node - use SDS typography tokens');
-        component.properties.textContent = node.characters;
+        const isHeading = node.name.toLowerCase().includes('heading') || 
+                         node.name.toLowerCase().includes('title');
+        analysisResult.detectedComponents.push({
+          component: isHeading ? 'TextHeading' : 'Text',
+          type: 'text',
+          path: isHeading ? 'src/ui/primitives/Text/TextHeading' : 'src/ui/primitives/Text/Text',
+          import: isHeading ? "import { TextHeading } from 'primitives';" : "import { Text } from 'primitives';"
+        });
+        analysisResult.properties.textContent = node.characters;
       }
 
       if (node.type === 'RECTANGLE' || node.type === 'FRAME') {
-        component.suggestions.push('Layout element - consider using SDS layout components');
-        component.properties.width = node.width;
-        component.properties.height = node.height;
+        if (node.name.toLowerCase().includes('button')) {
+          analysisResult.detectedComponents.push({
+            component: 'Button',
+            type: 'button',
+            path: 'src/ui/primitives/Button/Button',
+            import: "import { Button } from 'primitives';"
+          });
+        } else if (node.name.toLowerCase().includes('card')) {
+          analysisResult.detectedComponents.push({
+            component: 'Card',
+            type: 'card',
+            path: 'src/ui/compositions/Cards/Card',
+            import: "import { Card } from 'compositions';"
+          });
+        } else if (node.name.toLowerCase().includes('header')) {
+          analysisResult.detectedComponents.push({
+            component: 'Header',
+            type: 'header',
+            path: 'src/ui/compositions/Headers/Header',
+            import: "import { Header } from 'compositions';"
+          });
+        }
+        
+        analysisResult.properties.width = node.width;
+        analysisResult.properties.height = node.height;
       }
 
-      // Check for bound variables (if available)
-      if (node.boundVariables) {
-        component.properties.hasVariables = true;
-        component.suggestions.push('Has bound variables - map to SDS design tokens');
-      }
-
-      // Basic fill analysis
+      // Extract basic fill color
       if (node.fills && Array.isArray(node.fills) && node.fills.length > 0) {
         const fill = node.fills[0];
         if (fill.type === 'SOLID') {
-          component.properties.fillColor = {
+          analysisResult.properties.fillColor = {
             r: Math.round(fill.color.r * 255),
             g: Math.round(fill.color.g * 255),
             b: Math.round(fill.color.b * 255)
           };
-          component.suggestions.push('Use SDS color tokens instead of hardcoded colors');
         }
       }
 
-      results.components.push(component);
+      results.push(analysisResult);
 
     } catch (nodeError) {
       console.error(`❌ Error analyzing node ${node.name}:`, nodeError);
@@ -472,8 +516,8 @@ async function handleScanSelection() {
   console.log('✅ Scan complete:', results);
   
   figma.ui.postMessage({
-    type: 'scan-result',
-    data: results
+    type: 'analysis-complete',
+    results: results
   });
 }
 
@@ -484,7 +528,7 @@ figma.parameters.on('input', ({ parameters, key, query, result }) => {
   console.log('📝 Parameter input:', { key, query });
   
   switch (key) {
-    case 'component-type':
+    case 'component-type': {
       const componentTypes = ['Button', 'Input', 'Card', 'Header', 'Form', 'Navigation'];
       result.setSuggestions(
         componentTypes
@@ -492,6 +536,7 @@ figma.parameters.on('input', ({ parameters, key, query, result }) => {
           .map(type => ({ name: type, data: { type } }))
       );
       break;
+    }
       
     case 'include-variables':
       result.setSuggestions([

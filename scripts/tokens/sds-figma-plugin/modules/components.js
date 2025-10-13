@@ -1,10 +1,10 @@
-// ===== COMPONENT DETECTION MODULE =====
-// This module handles component detection and analysis with async patterns
-// Follows Figma documentation patterns for document access and node analysis
+// ===== SDS COMPONENT DETECTION - CODE CONNECT INTEGRATION =====
+// This module detects SDS components using Code Connect mappings instead of hardcoded patterns
+// Integrates with existing documentUrlSubstitutions from config.js
 
 /**
- * SDS Component Detection Patterns
- * Each pattern includes detection logic and mapping to SDS components
+ * Code Connect based component detection system
+ * Uses the existing documentUrlSubstitutions configuration to identify components
  */
 const SDS_COMPONENT_PATTERNS = {
   // Forms - from compositions
