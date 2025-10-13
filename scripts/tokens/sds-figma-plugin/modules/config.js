@@ -306,7 +306,7 @@ const sdsConfig = new SDSConfigurationManager();
 // Export for use in other modules
 if (typeof window !== 'undefined') {
   // Browser/Figma plugin environment
-  window.sdsConfigModule = sdsConfig;
+  window.configModule = sdsConfig;
   
   // Initialize automatically
   sdsConfig.initialize().then(() => {

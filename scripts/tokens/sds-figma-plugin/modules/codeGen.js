@@ -629,11 +629,46 @@ function mapSpacingToSdsToken(spacing) {
 }
 
 /**
- * Map color to SDS token (simplified)
+ * Map color to SDS token using variables module
  */
-function mapColorToSdsToken(color) {
-  // This would integrate with the variables module for proper mapping
+function mapColorToSdsToken(figmaColor) {
+  if (typeof figmaColor === 'object' && figmaColor.r !== undefined) {
+    // Convert Figma RGB to hex for token lookup
+    const hex = rgbToHex(figmaColor.r * 255, figmaColor.g * 255, figmaColor.b * 255);
+    
+    // Try to get token from variables module if available
+    if (window.variablesModule && window.variablesModule.getTokenByColor) {
+      const token = window.variablesModule.getTokenByColor(hex);
+      if (token) return `var(${token})`;
+    }
+    
+    // Fallback to basic SDS color mapping
+    const commonColors = {
+      'ffffff': '--sds-color-background-default-default',
+      '000000': '--sds-color-text-default-default',
+      'e75715': '--sds-color-background-brand-default',
+      '111111': '--sds-color-text-default-default'
+    };
+    
+    return `var(${commonColors[hex.toLowerCase()] || '--sds-color-background-default-default'})`;
+  }
+  
+  // Handle string colors
+  if (typeof figmaColor === 'string') {
+    if (window.variablesModule && window.variablesModule.getTokenByColor) {
+      const token = window.variablesModule.getTokenByColor(figmaColor);
+      if (token) return `var(${token})`;
+    }
+  }
+  
   return 'var(--sds-color-background-default-default)';
+}
+
+/**
+ * Helper function to convert RGB to hex
+ */
+function rgbToHex(r, g, b) {
+  return ((1 << 24) + (Math.round(r) << 16) + (Math.round(g) << 8) + Math.round(b)).toString(16).slice(1);
 }
 
 /**
@@ -697,17 +732,22 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 } else {
   // For Figma plugin environment
-  window.codeGenModule = {
-    generateSdsCode,
-    generateImports,
-    generateComponentByType,
-    generateFormCode,
-    generateHeaderCode,
-    generateButtonCode,
-    generateInputCode,
-    generateCardCode,
-    generateTextCode,
-    generateNavigationCode,
-    generateGenericCode
-  };
+  if (typeof window !== 'undefined') {
+    window.codeGenModule = {
+      generateSdsCode,
+      generateImports,
+      generateComponentByType,
+      generateFormCode,
+      generateHeaderCode,
+      generateButtonCode,
+      generateInputCode,
+      generateCardCode,
+      generateTextCode,
+      generateNavigationCode,
+      generateGenericCode
+    };
+    console.log('📦 CodeGen module exported to window.codeGenModule');
+  } else {
+    console.warn('⚠️ Window object not available for codeGen module export');
+  }
 }

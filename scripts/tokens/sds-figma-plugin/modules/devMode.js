@@ -504,15 +504,20 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 } else {
   // For Figma plugin environment
-  window.devModeModule = {
-    DevModeConfig,
-    initializeDevMode,
-    setupDevModeUI,
-    setupSelectionListeners,
-    handleSelectionChange,
-    getNodeDetailsForInspection,
-    generateCodeForInspection,
-    exportNodeData,
-    resizeUIForDevMode
-  };
+  if (typeof window !== 'undefined') {
+    window.devModeModule = {
+      DevModeConfig,
+      initializeDevMode,
+      setupDevModeUI,
+      setupSelectionListeners,
+      handleSelectionChange,
+      getNodeDetailsForInspection,
+      generateCodeForInspection,
+      exportNodeData,
+      resizeUIForDevMode
+    };
+    console.log('📦 DevMode module exported to window.devModeModule');
+  } else {
+    console.warn('⚠️ Window object not available for devMode module export');
+  }
 }

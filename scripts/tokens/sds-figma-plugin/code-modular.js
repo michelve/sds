@@ -10,7 +10,20 @@
 
 // ===== MODULE AVAILABILITY CHECK =====
 function checkModuleAvailability() {
+  // Check if we're in a proper environment
+  if (typeof window === 'undefined') {
+    console.log('⚠️ Window object not available yet');
+    return {
+      config: false,
+      variables: false,
+      components: false,
+      codeGen: false,
+      devMode: false
+    };
+  }
+  
   const modules = {
+    config: typeof window.configModule !== 'undefined',
     variables: typeof window.variablesModule !== 'undefined',
     components: typeof window.componentsModule !== 'undefined',
     codeGen: typeof window.codeGenModule !== 'undefined',
@@ -19,6 +32,27 @@ function checkModuleAvailability() {
   
   console.log('📦 Module availability:', modules);
   return modules;
+}
+
+/**
+ * Wait for all modules to be loaded before initializing
+ */
+async function waitForModules(maxRetries = 50, retryDelay = 100) {
+  for (let i = 0; i < maxRetries; i++) {
+    const modules = checkModuleAvailability();
+    const allLoaded = Object.values(modules).every(loaded => loaded);
+    
+    if (allLoaded) {
+      console.log('✅ All modules loaded successfully');
+      return modules;
+    }
+    
+    console.log(`⏳ Waiting for modules... attempt ${i + 1}/${maxRetries}`, modules);
+    await new Promise(resolve => setTimeout(resolve, retryDelay));
+  }
+  
+  console.warn('⚠️ Some modules failed to load, proceeding with partial functionality');
+  return checkModuleAvailability();
 }
 
 // ===== CONFIGURATION =====
@@ -45,8 +79,8 @@ async function initializePlugin() {
   try {
     console.log('🚀 Initializing SDS Component Scanner (Modular Version)...');
     
-    // Check module availability
-    const modules = checkModuleAvailability();
+    // Wait for all modules to be loaded
+    const modules = await waitForModules();
     
     // Initialize Variables API if available
     if (modules.variables && window.variablesModule) {
@@ -65,6 +99,16 @@ async function initializePlugin() {
         console.log('🔧 Dev Mode configured:', devConfig);
       } catch (error) {
         console.log('⚠️ Dev Mode initialization failed:', error.message);
+      }
+    }
+    
+    // Initialize Config if available
+    if (modules.config && window.configModule) {
+      try {
+        await window.configModule.initialize();
+        console.log('⚙️ Configuration loaded');
+      } catch (error) {
+        console.log('⚠️ Using fallback configuration:', error.message);
       }
     }
     
@@ -250,7 +294,7 @@ figma.ui.onmessage = async (msg) => {
 // Auto-resize UI
 figma.ui.resize(400, 600);
 
-// Initialize plugin after a short delay to ensure modules are loaded
-setTimeout(initializePlugin, 250);
+// Initialize plugin with proper module loading
+initializePlugin();
 
-console.log('📦 SDS Figma Plugin (Modular Version) loaded - waiting for initialization...');
+console.log('📦 SDS Figma Plugin (Modular Version) loaded - initializing modules...');

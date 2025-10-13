@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Module Loading Test</title>
+</head>
+<body>
+  <h1>Testing Module Loading</h1>
+  <div id="results"></div>
+
+  <!-- Load modules in order -->
+  <script src="modules/config.js"></script>
+  <script src="modules/variables.js"></script>
+  <script src="modules/components.js"></script>
+  <script src="modules/codeGen.js"></script>
+  <script src="modules/devMode.js"></script>
+  
+  <script>
+    const results = document.getElementById('results');
+    
+    function log(message) {
+      results.innerHTML += `<p>${message}</p>`;
+      console.log(message);
+    }
+    
+    function testModules() {
+      log('🧪 Testing module loading...');
+      
+      const modules = {
+        config: typeof window.configModule !== 'undefined',
+        variables: typeof window.variablesModule !== 'undefined',
+        components: typeof window.componentsModule !== 'undefined',
+        codeGen: typeof window.codeGenModule !== 'undefined',
+        devMode: typeof window.devModeModule !== 'undefined'
+      };
+      
+      log('📦 Module availability:');
+      Object.entries(modules).forEach(([name, loaded]) => {
+        log(`  ${name}: ${loaded ? '✅' : '❌'}`);
+      });
+      
+      // Test config module specifically
+      if (window.configModule) {
+        log(`🎯 Config module type: ${typeof window.configModule}`);
+        log(`🎯 Config methods: ${Object.keys(window.configModule)}`);
+      }
+    }
+    
+    // Wait a bit for modules to load, then test
+    setTimeout(testModules, 500);
+  </script>
+</body>
+</html>

@@ -2,13 +2,38 @@
   "name": "SDS Component Scanner",
   "id": "sds-component-scanner",
   "api": "1.0.0",
-  "main": "code-modular.js",
-  "ui": "ui.html",
+  "main": "code-figma-proper.js",
+  "ui": "ui-enhanced.html",
   "editorType": ["figma", "dev"],
-  "capabilities": ["inspect","vscode"],
+  "capabilities": ["inspect", "vscode"],
   "enableProposedApi": false,
   "documentAccess": "dynamic-page",
   "networkAccess": {
-    "allowedDomains": ["none"]
-  }
+    "allowedDomains": [
+      "https://github.com",
+      "https://api.github.com",
+      "https://figma.com",
+      "https://api.figma.com"
+    ],
+    "devAllowedDomains": [
+      "http://localhost",
+      "https://localhost"
+    ],
+    "reasoning": "Access to GitHub API for component source code retrieval and Figma API for design token synchronization. Localhost access needed for development and testing."
+  },
+  "parameters": [
+    {
+      "name": "Component Type",
+      "key": "component-type",
+      "optional": true,
+      "allowFreeform": false
+    },
+    {
+      "name": "Include Variables",
+      "key": "include-variables", 
+      "optional": true,
+      "allowFreeform": false
+    }
+  ],
+  "parameterOnly": false
 }

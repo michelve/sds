@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SDS Component Scanner</title>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 0;
+      padding: 16px;
+      background: #f8f9fa;
+      color: #333;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .header {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    .header p {
+      margin: 0;
+      color: #666;
+      font-size: 11px;
+    }
+    .debug-panel {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .debug-panel h3 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+    .status {
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin: 8px 0;
+      font-weight: 500;
+      font-size: 11px;
+    }
+    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+    .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .loading { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+    .log-container {
+      max-height: 250px;
+      overflow-y: auto;
+      background: #1e1e1e;
+      color: #ffffff;
+      padding: 12px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 10px;
+      line-height: 1.4;
+      margin: 8px 0;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin: 4px;
+      font-weight: 500;
+    }
+    button:hover:not(:disabled) {
+      background: #0056b3;
+    }
+    button:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+    }
+    .button-group {
+      text-align: center;
+      margin: 16px 0;
+    }
+    .scan-button {
+      background: #28a745;
+      font-size: 14px;
+      padding: 12px 24px;
+    }
+    .scan-button:hover:not(:disabled) {
+      background: #1e7e34;
+    }
+    .selection-info {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 11px;
+    }
+    .module-status {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .module-status:last-child {
+      border-bottom: none;
+    }
+    .module-name {
+      font-weight: 500;
+    }
+    .module-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .indicator-success { background: #28a745; }
+    .indicator-error { background: #dc3545; }
+    .indicator-loading { background: #ffc107; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🎯 SDS Component Scanner</h1>
+      <p>Select components to generate SDS-ready code</p>
+    </div>
+
+    <!-- Module Loading Status -->
+    <div class="debug-panel">
+      <h3>📦 Module Status</h3>
+      <div id="module-status">
+        <div class="status loading">Initializing modules...</div>
+      </div>
+    </div>
+
+    <!-- Debug Console -->
+    <div class="debug-panel">
+      <h3>🔍 Debug Console</h3>
+      <div class="button-group">
+        <button onclick="clearLog()">Clear Log</button>
+        <button onclick="runDiagnostics()">Run Diagnostics</button>
+      </div>
+      <div id="console-log" class="log-container"></div>
+    </div>
+
+    <!-- Main Controls -->
+    <div class="debug-panel">
+      <h3>🎨 Component Analysis</h3>
+      <div id="selection-info" class="selection-info">
+        Select components in Figma to analyze
+      </div>
+      <div class="button-group">
+        <button id="scan-button" class="scan-button" onclick="scanSelection()" disabled>
+          Scan Selection
+        </button>
+      </div>
+      <div id="results"></div>
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    let modulesLoaded = false;
+    let currentSelection = [];
+    
+    // Enhanced console logging
+    const originalLog = console.log;
+    const originalWarn = console.warn;
+    const originalError = console.error;
+    
+    function appendToLog(message, type = 'log') {
+      const logContainer = document.getElementById('console-log');
+      const timestamp = new Date().toLocaleTimeString();
+      const logLine = document.createElement('div');
+      logLine.style.color = type === 'error' ? '#ff6b6b' : type === 'warn' ? '#ffd93d' : '#ffffff';
+      logLine.textContent = `[${timestamp}] ${message}`;
+      logContainer.appendChild(logLine);
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+    
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      appendToLog(args.join(' '), 'log');
+    };
+    
+    console.warn = function(...args) {
+      originalWarn.apply(console, args);
+      appendToLog(args.join(' '), 'warn');
+    };
+    
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      appendToLog(args.join(' '), 'error');
+    };
+    
+    // Module status tracking
+    function updateModuleStatus() {
+      const modules = {
+        'Config Module': typeof window.configModule !== 'undefined',
+        'Variables Module': typeof window.variablesModule !== 'undefined',
+        'Components Module': typeof window.componentsModule !== 'undefined',
+        'Code Generation': typeof window.codeGenModule !== 'undefined',
+        'Dev Mode': typeof window.devModeModule !== 'undefined'
+      };
+      
+      let html = '';
+      let allLoaded = true;
+      
+      for (const [name, loaded] of Object.entries(modules)) {
+        const indicator = loaded ? 'indicator-success' : 'indicator-error';
+        html += `
+          <div class="module-status">
+            <span class="module-name">${name}</span>
+            <div class="module-indicator ${indicator}"></div>
+          </div>
+        `;
+        if (!loaded) allLoaded = false;
+      }
+      
+      document.getElementById('module-status').innerHTML = html;
+      modulesLoaded = allLoaded;
+      
+      // Update scan button
+      const scanButton = document.getElementById('scan-button');
+      scanButton.disabled = !allLoaded;
+      
+      if (allLoaded) {
+        console.log('✅ All modules loaded successfully');
+        appendToLog('🎉 Plugin ready for use!', 'log');
+      } else {
+        console.log('⚠️ Some modules are still loading...');
+      }
+      
+      return allLoaded;
+    }
+    
+    // Diagnostic functions
+    function runDiagnostics() {
+      console.log('🔧 Running comprehensive diagnostics...');
+      
+      // Environment check
+      console.log('🌍 Environment:', {
+        'Window object': typeof window !== 'undefined' ? '✅' : '❌',
+        'Document object': typeof document !== 'undefined' ? '✅' : '❌',
+        'Figma API': typeof parent !== 'undefined' && typeof parent.postMessage === 'function' ? '✅' : '❌'
+      });
+      
+      // Module availability
+      updateModuleStatus();
+      
+      // Try to communicate with main thread
+      try {
+        parent.postMessage({ pluginMessage: { type: 'ping' } }, '*');
+        console.log('📡 Sent ping to main thread');
+      } catch (error) {
+        console.error('❌ Failed to communicate with main thread:', error.message);
+      }
+    }
+    
+    function clearLog() {
+      document.getElementById('console-log').innerHTML = '';
+    }
+    
+    function scanSelection() {
+      if (!modulesLoaded) {
+        console.warn('⚠️ Cannot scan - modules not fully loaded');
+        return;
+      }
+      
+      console.log('🔍 Scanning current selection...');
+      
+      try {
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'scan-selection',
+            timestamp: Date.now()
+          } 
+        }, '*');
+      } catch (error) {
+        console.error('❌ Failed to send scan request:', error.message);
+      }
+    }
+    
+    // Message handling
+    window.addEventListener('message', (event) => {
+      const message = event.data.pluginMessage;
+      if (!message) return;
+      
+      console.log('📨 Received message:', message.type);
+      
+      switch (message.type) {
+        case 'selection-changed':
+          currentSelection = message.selection || [];
+          const selectionInfo = document.getElementById('selection-info');
+          if (currentSelection.length === 0) {
+            selectionInfo.innerHTML = 'No components selected';
+            selectionInfo.className = 'selection-info';
+          } else {
+            selectionInfo.innerHTML = `Selected: ${currentSelection.length} component(s)`;
+            selectionInfo.className = 'selection-info status success';
+          }
+          break;
+          
+        case 'analysis-complete':
+          console.log('📊 Analysis complete:', message.data);
+          const results = document.getElementById('results');
+          if (message.data && message.data.components) {
+            results.innerHTML = `
+              <div class="status success">
+                Found ${message.data.components.length} component(s)
+              </div>
+              <pre>${JSON.stringify(message.data, null, 2)}</pre>
+            `;
+          }
+          break;
+          
+        case 'error':
+          console.error('❌ Plugin error:', message.error);
+          document.getElementById('results').innerHTML = `
+            <div class="status error">Error: ${message.error}</div>
+          `;
+          break;
+          
+        case 'pong':
+          console.log('🏓 Received pong from main thread');
+          break;
+      }
+    });
+    
+    // Initialize
+    console.log('🚀 SDS Component Scanner UI initializing...');
+    
+    // Wait for modules to load
+    let moduleCheckCount = 0;
+    const maxModuleChecks = 100;
+    
+    function checkModulesLoaded() {
+      moduleCheckCount++;
+      const loaded = updateModuleStatus();
+      
+      if (loaded) {
+        console.log(`✅ All modules loaded after ${moduleCheckCount} checks`);
+        runDiagnostics();
+      } else if (moduleCheckCount < maxModuleChecks) {
+        setTimeout(checkModulesLoaded, 100);
+      } else {
+        console.error(`❌ Modules failed to load after ${maxModuleChecks} attempts`);
+        document.getElementById('module-status').innerHTML = 
+          '<div class="status error">❌ Module loading failed - check console for details</div>';
+      }
+    }
+    
+    // Start checking after a brief delay
+    setTimeout(checkModulesLoaded, 200);
+  </script>
+
+  <!-- Load modules in sequence with error handling -->
+  <script>
+    console.log('📦 Loading modules...');
+    
+    function loadModuleWithFallback(src, moduleName) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+          console.log(`✅ Loaded ${moduleName}`);
+          resolve();
+        };
+        script.onerror = (error) => {
+          console.error(`❌ Failed to load ${moduleName}:`, error);
+          reject(error);
+        };
+        document.head.appendChild(script);
+      });
+    }
+    
+    // Load modules sequentially
+    async function loadAllModules() {
+      try {
+        await loadModuleWithFallback('modules/config.js', 'Config Module');
+        await loadModuleWithFallback('modules/variables.js', 'Variables Module');
+        await loadModuleWithFallback('modules/components.js', 'Components Module');
+        await loadModuleWithFallback('modules/codeGen.js', 'Code Generation Module');
+        await loadModuleWithFallback('modules/devMode.js', 'Dev Mode Module');
+        console.log('🎉 All modules loaded successfully!');
+      } catch (error) {
+        console.error('💥 Module loading failed:', error);
+      }
+    }
+    
+    loadAllModules();
+  </script>
+
+  <!-- Main coordination script -->
+  <script src="code-modular.js"></script>
+</body>
+</html>

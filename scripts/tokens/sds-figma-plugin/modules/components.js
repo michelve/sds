@@ -519,13 +519,18 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 } else {
   // For Figma plugin environment
-  window.componentsModule = {
-    SDS_COMPONENT_PATTERNS,
-    analyzeSelection,
-    analyzeNodeAsync,
-    extractDesignPropertiesAsync,
-    analyzeChildComponents,
-    findComponentsByType,
-    getComponentHierarchy
-  };
+  if (typeof window !== 'undefined') {
+    window.componentsModule = {
+      SDS_COMPONENT_PATTERNS,
+      analyzeSelection,
+      analyzeNodeAsync,
+      extractDesignPropertiesAsync,
+      analyzeChildComponents,
+      findComponentsByType,
+      getComponentHierarchy
+    };
+    console.log('📦 Components module exported to window.componentsModule');
+  } else {
+    console.warn('⚠️ Window object not available for components module export');
+  }
 }

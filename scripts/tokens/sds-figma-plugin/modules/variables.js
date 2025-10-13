@@ -295,12 +295,17 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 } else {
   // For Figma plugin environment
-  window.variablesModule = {
-    getLocalVariables,
-    getBoundVariables,
-    getVariableValue,
-    mapVariableToSdsToken,
-    figmaColorToCss,
-    getFallbackVariables
-  };
+  if (typeof window !== 'undefined') {
+    window.variablesModule = {
+      getLocalVariables,
+      getBoundVariables,
+      getVariableValue,
+      mapVariableToSdsToken,
+      figmaColorToCss,
+      getFallbackVariables
+    };
+    console.log('📦 Variables module exported to window.variablesModule');
+  } else {
+    console.warn('⚠️ Window object not available for variables module export');
+  }
 }
