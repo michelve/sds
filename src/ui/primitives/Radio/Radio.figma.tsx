@@ -18,7 +18,6 @@ figma.connect(
       label: figma.string("Label"),
       description: figma.boolean("Has Description", {
         true: figma.string("Description"),
-        false: undefined,
       }),
       isDisabled: figma.enum("State", { 
         Disabled: true,

@@ -59,7 +59,7 @@ figma.connect(
       href: figma.enum("State", { 
         Default: "?previous", 
         Hover: "?previous",
-        Disabled: null
+        Disabled: undefined
       }),
     },
     example: (props) => (
@@ -77,7 +77,7 @@ figma.connect(
       href: figma.enum("State", { 
         Default: "?next", 
         Hover: "?next",
-        Disabled: null
+        Disabled: undefined
       }),
     },
     example: (props) => (
@@ -92,7 +92,7 @@ figma.connect(
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.children(["Pagination Page", "Pagination Gap"]),
+      children: figma.children("Pagination Page"),
     },
     example: (props) => (
       <PaginationList>
@@ -108,11 +108,7 @@ figma.connect(
   {
     props: {
       // These props were automatically mapped based on your linked code:
-      children: figma.children([
-        "Pagination Previous",
-        "Pagination List",
-        "Pagination Next",
-      ]),
+      children: figma.children("Pagination Previous"),
     },
     example: (props) => (
       <Pagination>

@@ -11,7 +11,7 @@ import figma from "@figma/code-connect"
 
 figma.connect(
   Logo,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13568",
+  "<FIGMA_LOGO_LOGO>",
   {
     props: {
       // These props were automatically mapped based on your linked code:

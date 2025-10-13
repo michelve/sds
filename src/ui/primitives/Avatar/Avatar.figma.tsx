@@ -19,18 +19,16 @@ figma.connect(
         Square: true,
         Circle: false
       }),
-      initials: figma.enum("Type", {
-        Initial: figma.string("Initials"),
-        Image: undefined
+      initials: figma.boolean("Type", {
+        true: figma.string("Initials"),
       }),
       size: figma.enum("Size", {
         Small: "small",
         Medium: "medium",
         Large: "large"
       }),
-      src: figma.enum("Type", {
-        Image: figma.string("Image Source"),
-        Initial: undefined
+      src: figma.boolean("Type", {
+        true: figma.string("Image Source"),
       }),
       alt: figma.string("Alt Text"),
     },
@@ -56,18 +54,16 @@ figma.connect(
         Square: true,
         Circle: false
       }),
-      initials: figma.enum("Type", {
-        Initial: figma.string("Initials"),
-        Image: undefined
+      initials: figma.boolean("Type", {
+        true: figma.string("Initials"),
       }),
       size: figma.enum("Size", {
         Small: "small",
         Medium: "medium",
         Large: "large"
       }),
-      src: figma.enum("Type", {
-        Image: figma.string("Image Source"),
-        Initial: undefined
+      src: figma.boolean("Type", {
+        true: figma.string("Image Source"),
       }),
       alt: figma.string("Alt Text"),
     },
@@ -116,12 +112,11 @@ figma.connect(
         Default: "200"
       }),
       children: figma.children("Avatar"),
-      max: figma.number("Max Count"),
     },
     example: (props) => (
       <AvatarGroup
         spacing={props.spacing}
-        max={props.max || 3}
+        max={3}
       >
         {props.children}
       </AvatarGroup>

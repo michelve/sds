@@ -11,7 +11,7 @@ import figma from "@figma/code-connect"
 
 figma.connect(
   ListBox,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13538",
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13518",
   {
     props: {
       // These props were automatically mapped based on your linked code:
@@ -27,7 +27,7 @@ figma.connect(
 
 figma.connect(
   ListBoxItem,
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13538",
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=4049%3A13518",
   {
     props: {
       // These props were automatically mapped based on your linked code:
