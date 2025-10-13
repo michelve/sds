@@ -21,6 +21,7 @@
     "figma:connect:init": "figma connect init",
     "figma:connect:create": "figma connect create",
     "figma:connect:publish": "figma connect publish",
+    "figma:connect:validate": "figma connect validate",
     "figma:connect:list": "figma connect list"
   },
   "prettier": {
