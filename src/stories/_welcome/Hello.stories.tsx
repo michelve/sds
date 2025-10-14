@@ -27,17 +27,7 @@ export const StoryHello: StoryObj<{}> = {
             <Text>
               Simple Design System (SDS) is a base design system that shows how
               Variables, Styles, Components, and Code Connect can be used
-              alongside a React and CSS codebase to form a complete picture
-              of a responsive web design system.
-            </Text>
-
-            <Text>
-              SDS is not just another design system. There are still many gaps
-              between design and development, and SDS provides some best
-              practices for how to bridge them. SDS attempts to remain honest
-              about its implications in code, while also offering
-              customizability in design beyond a simple theming layer that is
-              typical of many code-first component libraries.
+              alongside a React and CSS codebase.
             </Text>
           </Flex>
         </FlexItem>
