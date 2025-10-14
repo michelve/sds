@@ -20,7 +20,9 @@ import {
 } from "primitives";
 
 figma.connect(TextTitleHero, "<FIGMA_TEXT_TEXT_TITLE_HERO>", {
-  props: { text: figma.string("Text") },
+  props: {
+    text: figma.string("Text"),
+  },
   example: ({ text }) => <TextTitleHero>{text}</TextTitleHero>,
 });
 figma.connect(TextTitlePage, "<FIGMA_TEXT_TEXT_TITLE_PAGE>", {
@@ -34,16 +36,8 @@ figma.connect(TextSubtitle, "<FIGMA_TEXT_TEXT_SUBTITLE>", {
 figma.connect(TextHeading, "<FIGMA_TEXT_TEXT_HEADING>", {
   props: {
     text: figma.string("Text"),
-    color: figma.enum("Color", {
-      Default: "default",
-      Subtle: "subtle",
-      Brand: "brand",
-      Danger: "danger",
-      Positive: "positive",
-      Warning: "warning",
-    }),
   },
-  example: ({ text, color }) => <TextHeading color={color}>{text}</TextHeading>,
+  example: ({ text }) => <TextHeading>{text}</TextHeading>,
 });
 figma.connect(TextSubheading, "<FIGMA_TEXT_TEXT_SUBHEADING>", {
   props: { text: figma.string("Text") },
@@ -52,16 +46,8 @@ figma.connect(TextSubheading, "<FIGMA_TEXT_TEXT_SUBHEADING>", {
 figma.connect(Text, "<FIGMA_TEXT_TEXT>", {
   props: {
     text: figma.string("Text"),
-    color: figma.enum("Color", {
-      Default: "default",
-      Subtle: "subtle",
-      Brand: "brand",
-      Danger: "danger",
-      Positive: "positive",
-      Warning: "warning",
-    }),
   },
-  example: ({ text, color }) => <Text color={color}>{text}</Text>,
+  example: ({ text }) => <Text>{text}</Text>,
 });
 figma.connect(TextEmphasis, "<FIGMA_TEXT_TEXT_EMPHASIS>", {
   props: { text: figma.string("Text") },
@@ -152,14 +138,6 @@ figma.connect(TextContentTitle, "<FIGMA_TEXT_TEXT_CONTENT_TITLE>", {
     }),
     title: figma.string("Title"),
     subtitle: figma.string("Subtitle"),
-    color: figma.enum("Color", {
-      Default: "default",
-      Subtle: "subtle",
-      Brand: "brand",
-      Danger: "danger",
-      Positive: "positive",
-      Warning: "warning",
-    }),
   },
   example: ({ ...props }) => <TextContentTitle {...props} />,
 });
