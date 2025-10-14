@@ -66,6 +66,16 @@ import {
   IconMenu,
 } from "icons";
 
+const Divider = () => (
+  <hr
+    style={{
+      border: "none",
+      borderTop: "1px solid var(--sds-color-border-default-default)",
+      margin: "var(--sds-size-space-800) 0",
+    }}
+  />
+);
+
 const ShowcaseSection = ({
   title,
   children,
@@ -75,8 +85,8 @@ const ShowcaseSection = ({
   children: React.ReactNode;
   columns?: 1 | 2 | 3;
 }) => (
-  <Section style={{ marginBottom: "var(--size-800)" }}>
-    <TextHeading style={{ marginBottom: "var(--size-500)" }}>
+  <Section style={{ marginBottom: "var(--sds-size-space-800)" }}>
+    <TextHeading style={{ marginBottom: "var(--sds-size-space-600)" }}>
       {title}
     </TextHeading>
     {columns === 1 ? (
@@ -175,6 +185,8 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Form Inputs */}
       <ShowcaseSection title="Form Inputs" columns={2}>
         <VariantCard label="Input Field">
@@ -209,6 +221,8 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Selection Controls */}
       <ShowcaseSection title="Selection Controls" columns={2}>
         <VariantCard label="Checkbox">
@@ -240,6 +254,8 @@ export function ComponentShowcase() {
           />
         </VariantCard>
       </ShowcaseSection>
+
+      <Divider />
 
       {/* Tags */}
       <ShowcaseSection title="Tags" columns={2}>
@@ -282,6 +298,8 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Navigation */}
       <ShowcaseSection title="Navigation" columns={2}>
         <VariantCard label="Navigation Pills - Row">
@@ -322,6 +340,8 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Pagination */}
       <ShowcaseSection title="Pagination">
         <VariantCard label="Pagination">
@@ -339,6 +359,8 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Notifications */}
       <ShowcaseSection title="Notifications" columns={2}>
         <VariantCard label="Message Notification">
@@ -355,6 +377,8 @@ export function ComponentShowcase() {
           </Notification>
         </VariantCard>
       </ShowcaseSection>
+
+      <Divider />
 
       {/* Avatars */}
       <ShowcaseSection title="Avatars" columns={2}>
@@ -377,6 +401,8 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Accordion */}
       <ShowcaseSection title="Accordion">
         <VariantCard label="Accordion">
@@ -393,6 +419,8 @@ export function ComponentShowcase() {
           </Accordion>
         </VariantCard>
       </ShowcaseSection>
+
+      <Divider />
 
       {/* Table */}
       <ShowcaseSection title="Table">
@@ -441,8 +469,10 @@ export function ComponentShowcase() {
         </VariantCard>
       </ShowcaseSection>
 
+      <Divider />
+
       {/* Typography */}
-      <ShowcaseSection title="Typography">
+      <ShowcaseSection title="Typography" columns={2}>
         <VariantCard label="Text Hierarchy">
           <Flex direction="column" gap="400">
             <div>
@@ -477,7 +507,61 @@ export function ComponentShowcase() {
             </div>
           </Flex>
         </VariantCard>
+
+        <VariantCard label="Color Variants">
+          <Flex direction="column" gap="300">
+            <div>
+              <TextSmall style={{ color: "var(--color-text-subtle)", marginBottom: "var(--size-100)" }}>
+                Default
+              </TextSmall>
+              <Text color="default">Default text color for standard content</Text>
+            </div>
+            <div>
+              <TextSmall style={{ color: "var(--color-text-subtle)", marginBottom: "var(--size-100)" }}>
+                Subtle
+              </TextSmall>
+              <Text color="subtle">Subtle text for secondary information</Text>
+            </div>
+            <div>
+              <TextSmall style={{ color: "var(--color-text-subtle)", marginBottom: "var(--size-100)" }}>
+                Brand
+              </TextSmall>
+              <Text color="brand">Brand text for primary highlights</Text>
+            </div>
+            <div>
+              <TextSmall style={{ color: "var(--color-text-subtle)", marginBottom: "var(--size-100)" }}>
+                Danger
+              </TextSmall>
+              <Text color="danger">Danger text for errors and warnings</Text>
+            </div>
+            <div>
+              <TextSmall style={{ color: "var(--color-text-subtle)", marginBottom: "var(--size-100)" }}>
+                Positive
+              </TextSmall>
+              <Text color="positive">Positive text for success messages</Text>
+            </div>
+            <div>
+              <TextSmall style={{ color: "var(--color-text-subtle)", marginBottom: "var(--size-100)" }}>
+                Warning
+              </TextSmall>
+              <Text color="warning">Warning text for caution notices</Text>
+            </div>
+          </Flex>
+        </VariantCard>
+
+        <VariantCard label="Heading Color Variants">
+          <Flex direction="column" gap="300">
+            <TextHeading color="default">Default Heading</TextHeading>
+            <TextHeading color="subtle">Subtle Heading</TextHeading>
+            <TextHeading color="brand">Brand Heading</TextHeading>
+            <TextHeading color="danger">Danger Heading</TextHeading>
+            <TextHeading color="positive">Positive Heading</TextHeading>
+            <TextHeading color="warning">Warning Heading</TextHeading>
+          </Flex>
+        </VariantCard>
       </ShowcaseSection>
+
+      <Divider />
 
       {/* Other Elements */}
       <ShowcaseSection title="Other Elements" columns={3}>

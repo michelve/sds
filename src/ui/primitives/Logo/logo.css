@@ -1,7 +1,16 @@
 .logo {
   --border-radius: var(--sds-size-radius-200);
+  background-color: var(--sds-color-background-brand-default);
   border-radius: var(--border-radius);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sds-size-space-400);
+  padding: var(--sds-size-space-100) var(--sds-size-space-200);
   position: relative;
+  width: var(--logo-size);
+  height: var(--logo-size);
 
   &[data-focus-visible] {
     outline: none;
@@ -19,8 +28,16 @@
     }
   }
   > svg {
-    --logo-color: var(--sds-color-icon-default-default);
+    --logo-color: var(--sds-color-text-brand-on-brand);
     height: auto;
-    width: var(--sds-size-icon-small);
+    width: 100%;
   }
+}
+
+.logo-size-default {
+  --logo-size: var(--sds-size-icon-medium);
+}
+
+.logo-size-sm {
+  --logo-size: var(--sds-size-icon-small);
 }
