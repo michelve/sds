@@ -164,6 +164,7 @@ figma.connect(TextContentTitle, "<FIGMA_TEXT_TEXT_CONTENT_TITLE>", {
       Center: "center",
       Start: "start",
     }),
+    title: figma.textContent("Title"),
     subtitle: figma.string("Subtitle"),
     color: figma.enum("color", {
       default: "default",

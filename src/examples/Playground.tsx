@@ -12,11 +12,12 @@ export function Playground() {
   return (
     <div>
       <Hero variant="subtle">
-    <TextContentTitle
-        align="center"
-        title="Title"
-        subtitle="Subtitle"
-    />
+      <TextContentTitle
+align="center"
+title="Title"
+subtitle="Subtitle"
+color="default"
+/>
     <FormBox onSubmit={() => {}}>
         <InputField
             label="Name"
@@ -47,4 +48,6 @@ export function Playground() {
     </div>
   );
 }
+
+
 
