@@ -150,6 +150,14 @@ figma.connect(TextContentHeading, "<FIGMA_TEXT_TEXT_CONTENT_HEADING>", {
     align: figma.enum("Align", { Center: "center" }),
     heading: figma.string("Heading"),
     subheading: figma.string("Subheading"),
+    color: figma.enum("color", {
+      default: "default",
+      subtle: "subtle",
+      brand: "brand",
+      danger: "danger",
+      positive: "positive",
+      warning: "warning",
+    }),
   },
   example: ({ ...props }) => <TextContentHeading {...props} />,
 });
@@ -162,6 +170,14 @@ figma.connect(TextContentTitle, "<FIGMA_TEXT_TEXT_CONTENT_TITLE>", {
     }),
     title: figma.string("Title"),
     subtitle: figma.string("Subtitle"),
+    color: figma.enum("color", {
+      default: "default",
+      subtle: "subtle",
+      brand: "brand",
+      danger: "danger",
+      positive: "positive",
+      warning: "warning",
+    }),
   },
   example: ({ ...props }) => <TextContentTitle {...props} />,
 });
