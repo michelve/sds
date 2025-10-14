@@ -1,12 +1,5 @@
 {
   "mcpServers": {
-    "shadcn": {
-      "command": "npx",
-      "args": [
-        "shadcn@latest",
-        "mcp"
-      ]
-    },
     "TalkToFigma": {
       "command": "npx",
       "args": [
