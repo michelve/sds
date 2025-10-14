@@ -21,7 +21,7 @@ import {
 
 figma.connect(TextTitleHero, "<FIGMA_TEXT_TEXT_TITLE_HERO>", {
   props: {
-    text: figma.string("Text"),
+    children: figma.textContent("Text"),
     color: figma.enum("color", {
       default: "default",
       subtle: "subtle",
@@ -31,7 +31,7 @@ figma.connect(TextTitleHero, "<FIGMA_TEXT_TEXT_TITLE_HERO>", {
       warning: "warning",
     }),
   },
-  example: ({ text, color }) => <TextTitleHero color={color}>{text}</TextTitleHero>,
+  example: ({ children, color }) => <TextTitleHero color={color}>{children}</TextTitleHero>,
 });
 figma.connect(TextTitlePage, "<FIGMA_TEXT_TEXT_TITLE_PAGE>", {
   props: { text: figma.string("Text") },
@@ -43,7 +43,7 @@ figma.connect(TextSubtitle, "<FIGMA_TEXT_TEXT_SUBTITLE>", {
 });
 figma.connect(TextHeading, "<FIGMA_TEXT_TEXT_HEADING>", {
   props: {
-    text: figma.string("Text"),
+    children: figma.textContent("Text"),
     color: figma.enum("color", {
       default: "default",
       subtle: "subtle",
@@ -53,7 +53,7 @@ figma.connect(TextHeading, "<FIGMA_TEXT_TEXT_HEADING>", {
       warning: "warning",
     }),
   },
-  example: ({ text, color }) => <TextHeading color={color}>{text}</TextHeading>,
+  example: ({ children, color }) => <TextHeading color={color}>{children}</TextHeading>,
 });
 figma.connect(TextSubheading, "<FIGMA_TEXT_TEXT_SUBHEADING>", {
   props: { text: figma.string("Text") },
@@ -61,7 +61,7 @@ figma.connect(TextSubheading, "<FIGMA_TEXT_TEXT_SUBHEADING>", {
 });
 figma.connect(Text, "<FIGMA_TEXT_TEXT>", {
   props: {
-    text: figma.string("Text"),
+    children: figma.textContent("Text"),
     color: figma.enum("color", {
       default: "default",
       subtle: "subtle",
@@ -71,7 +71,7 @@ figma.connect(Text, "<FIGMA_TEXT_TEXT>", {
       warning: "warning",
     }),
   },
-  example: ({ text, color }) => <Text color={color}>{text}</Text>,
+  example: ({ children, color }) => <Text color={color}>{children}</Text>,
 });
 figma.connect(TextEmphasis, "<FIGMA_TEXT_TEXT_EMPHASIS>", {
   props: { text: figma.string("Text") },
