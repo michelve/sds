@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { FormBox } from "compositions";
+import { FormBox, FormWithTitle } from "compositions";
 import { Button, ButtonGroup, CheckboxField, InputField } from "primitives";
 
 const meta: Meta<typeof FormBox> = {
@@ -27,5 +27,18 @@ export const StoryFormBox: StoryObj<typeof FormBox> = {
         </Button>
       </ButtonGroup>
     </FormBox>
+  ),
+};
+
+export const StoryFormWithTitle: StoryObj<typeof FormWithTitle> = {
+  name: "Form With Title",
+  render: () => (
+    <div style={{ maxWidth: 800 }}>
+      <FormWithTitle
+        title="Title"
+        subtitle="Subtitle"
+        onSubmit={() => {}}
+      />
+    </div>
   ),
 };
