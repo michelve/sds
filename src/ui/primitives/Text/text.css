@@ -158,6 +158,10 @@
 }
 
 /* Text color variants */
+.text-color-default {
+  color: var(--sds-color-text-default-default);
+}
+
 .text-color-subtle {
   color: var(--sds-color-text-default-secondary);
 }
