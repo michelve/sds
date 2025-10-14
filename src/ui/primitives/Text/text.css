@@ -163,17 +163,17 @@
 }
 
 .text-color-brand {
-  color: var(--sds-color-text-brand);
+  color: var(--sds-color-text-brand-default);
 }
 
 .text-color-danger {
-  color: var(--sds-color-text-danger);
+  color: var(--sds-color-text-danger-default);
 }
 
 .text-color-positive {
-  color: var(--sds-color-text-positive);
+  color: var(--sds-color-text-positive-default);
 }
 
 .text-color-warning {
-  color: var(--sds-color-text-warning);
+  color: var(--sds-color-text-warning-default);
 }
