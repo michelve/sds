@@ -1,3 +1,3 @@
 ## Code Connect Task
 
-using #get_code_connect_map lets get the variables and component for this selection https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=175-5195&m=dev, we are using figma code connect, and use our local components, then lets use #get_code to implement this new form lets called it form_with_title.
+using #get_code_connect_map lets get the variables and component for this selection https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho/Simple-Design-System?node-id=175-5195&m=dev, we are using figma code connect, and use our local components, then lets use #get_code to implement this new form lets called it form_with_title. Pay attention to text title and text color properties.
