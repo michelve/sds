@@ -2065,28 +2065,29 @@
     "id": "9762:426",
     "page": "Buttons",
     "name": "Button",
-    "constant": "<FIGMA_BUTTONS_BUTTON>"
+    "constant": "<FIGMA_BUTTONS_BUTTON>",
+    "description": ["Primary action button for forms, navigation, and user interactions", "Keywords: action, primary, cta"]
   },
   "89a8b6fe6061a16272f17bc04521ca18222ff1c0": {
     "id": "11:11508",
     "page": "Buttons",
     "name": "Icon Button",
     "constant": "<FIGMA_BUTTONS_ICON_BUTTON>",
-    "description": ["Keywords: action"]
+    "description": ["Compact button with icon only, ideal for toolbars and secondary actions", "Keywords: action, icon, compact"]
   },
   "fccd7bb7a95845a7085ad8cb58c59f542035122d": {
     "id": "2072:9432",
     "page": "Buttons",
     "name": "Button Group",
     "constant": "<FIGMA_BUTTONS_BUTTON_GROUP>",
-    "description": ["Keywords: actions"]
+    "description": ["Container for grouping related buttons with consistent spacing", "Keywords: actions, group, layout"]
   },
   "ad61a82dcab4fe1fd7a477bc7551d936955774f3": {
     "id": "185:852",
     "page": "Buttons",
     "name": "Button Danger",
     "constant": "<FIGMA_BUTTONS_BUTTON_DANGER>",
-    "description": ["Keywords: action, negative, destructive"]
+    "description": ["Destructive action button for delete, remove, or irreversible actions", "Keywords: action, negative, destructive, warning"]
   },
   "f978029be2d6f6ac796331cea2777975f0cad36f": {
     "id": "2142:11380",
