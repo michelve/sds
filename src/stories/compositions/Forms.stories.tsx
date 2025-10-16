@@ -38,7 +38,16 @@ export const StoryFormWithTitle: StoryObj<typeof FormWithTitle> = {
         title="Title"
         subtitle="Subtitle"
         onSubmit={() => {}}
-      />
+      >
+        <InputField label="Email" />
+        <InputField label="Password" />
+        <CheckboxField label="Label" description="Description" />
+        <ButtonGroup align="justify">
+          <Button onPress={() => {}} variant="primary">
+            Register
+          </Button>
+        </ButtonGroup>
+      </FormWithTitle>
     </div>
   ),
 };
