@@ -271,6 +271,7 @@ function buildComponentBody(rootName, rootNode) {
     var hasText = guessed.some(function (c) { return c.name === "Text" && c.importFrom === "primitives"; });
     var hasButtonGroup = guessed.some(function (c) { return c.name === "ButtonGroup" && c.importFrom === "primitives"; });
     var hasButton = guessed.some(function (c) { return c.name === "Button" && c.importFrom === "primitives"; });
+    var hasAvatar = guessed.some(function (c) { return (c.name === "Avatar" || c.name === "AvatarBlock" || c.name === "AvatarGroup") && c.importFrom === "primitives"; });
     var filledImports = "import React from 'react';\n" +
       (hasHero ? "import { Hero } from 'compositions';\n" : "") +
       (hasText ? "import { Text } from 'primitives';\n" : "") +
@@ -295,7 +296,195 @@ function buildComponentBody(rootName, rootNode) {
       cc.buttons = buttonLabels;
     }
 
-    return { detectionReport: report.length ? report : "No components detected.", filledCode: filledBody, codeConnect: JSON.stringify(cc, null, 2) };
+    // Load design system rules for detected components
+    var rulesContent = "";
+    var detectedComponents = guessed.filter(function(c) { return c.name && c.importFrom; });
+    
+    if (detectedComponents.length > 0) {
+      // Check if Button is detected and load its rules
+      if (hasButton) {
+        rulesContent = "# Button Design Rules\n\n" +
+          "## Usage Guidelines\n" +
+          "- Use primary buttons for main actions (Submit, Save, Continue)\n" +
+          "- Use neutral buttons for secondary actions (Cancel, Back)\n" +
+          "- Use subtle buttons for tertiary actions (Skip, Learn More)\n" +
+          "- Use danger buttons for destructive actions (Delete, Remove)\n\n" +
+          "## Accessibility\n" +
+          "- Always provide clear, descriptive labels\n" +
+          "- Ensure sufficient color contrast\n" +
+          "- Support keyboard navigation\n" +
+          "- Use appropriate button sizes for touch targets\n\n" +
+          "## States\n" +
+          "- Default: Ready for interaction\n" +
+          "- Hover: Visual feedback on mouse over\n" +
+          "- Active: Pressed state\n" +
+          "- Disabled: Non-interactive state\n" +
+          "- Loading: Processing state with spinner\n\n" +
+          "## Do's and Don'ts\n" +
+          "✅ Do: Use consistent button hierarchy\n" +
+          "✅ Do: Group related actions together\n" +
+          "✅ Do: Use clear, action-oriented labels\n" +
+          "❌ Don't: Use buttons for navigation (use links instead)\n" +
+          "❌ Don't: Mix button styles inconsistently\n" +
+          "❌ Don't: Use vague labels like 'Click here'";
+      } else if (hasText) {
+        rulesContent = "# Text Design Rules\n\n" +
+          "## Text Hierarchy\n" +
+          "- **TextHeading**: Main page titles and section headers\n" +
+          "- **TextSubheading**: Secondary headings and subsection titles\n" +
+          "- **TextTitleHero**: Large hero text for landing pages\n" +
+          "- **TextTitlePage**: Page-level titles and main headings\n" +
+          "- **Text**: Body text for paragraphs and general content\n" +
+          "- **TextEmphasis**: Highlighted or emphasized text\n" +
+          "- **TextStrong**: Bold text for important information\n" +
+          "- **TextSmall**: Captions, footnotes, and secondary information\n" +
+          "- **TextCode**: Code snippets and technical content\n" +
+          "- **TextLink**: Interactive links and navigation text\n" +
+          "- **TextPrice**: Pricing information and monetary values\n\n" +
+          "## Usage Guidelines\n" +
+          "- Use consistent text hierarchy throughout your design\n" +
+          "- Maintain proper contrast ratios for accessibility\n" +
+          "- Choose appropriate text sizes for different screen sizes\n" +
+          "- Use semantic text variants (don't style regular text to look like headings)\n\n" +
+          "## Color Variants\n" +
+          "- **Default**: Standard text color for most content\n" +
+          "- **Subtle**: Secondary information and less important text\n" +
+          "- **Brand**: Brand-colored text for highlights and CTAs\n" +
+          "- **Danger**: Error messages and destructive actions\n" +
+          "- **Positive**: Success messages and confirmations\n" +
+          "- **Warning**: Cautionary information and alerts\n\n" +
+          "## Accessibility\n" +
+          "- Ensure minimum 4.5:1 contrast ratio for normal text\n" +
+          "- Ensure minimum 3:1 contrast ratio for large text (18pt+)\n" +
+          "- Use semantic HTML elements when possible\n" +
+          "- Provide alternative text for images\n" +
+          "- Support screen readers with proper heading structure\n\n" +
+          "## Typography Scale\n" +
+          "- **Hero**: 48px+ for main headlines\n" +
+          "- **Page Title**: 32px-40px for page headers\n" +
+          "- **Heading**: 24px-32px for section headers\n" +
+          "- **Subheading**: 18px-24px for subsection titles\n" +
+          "- **Body**: 16px for main content\n" +
+          "- **Small**: 14px for captions and footnotes\n" +
+          "- **Code**: Monospace font for technical content\n\n" +
+          "## Do's and Don'ts\n" +
+          "✅ Do: Use consistent text hierarchy\n" +
+          "✅ Do: Choose appropriate color variants for context\n" +
+          "✅ Do: Maintain proper line height for readability\n" +
+          "✅ Do: Use semantic text components\n" +
+          "❌ Don't: Mix text sizes inconsistently\n" +
+          "❌ Don't: Use low contrast text colors\n" +
+          "❌ Don't: Style regular text to look like headings\n" +
+          "❌ Don't: Use text colors that don't match their semantic meaning\n\n" +
+          "## Responsive Behavior\n" +
+          "- Text sizes should scale appropriately on mobile devices\n" +
+          "- Maintain readability across all screen sizes\n" +
+          "- Consider touch targets for interactive text elements\n" +
+          "- Use appropriate line lengths (45-75 characters per line)";
+      } else if (hasAvatar) {
+        rulesContent = "# Avatar Design Rules\n\n" +
+          "## Avatar Types\n" +
+          "- **Avatar**: Individual user profile pictures\n" +
+          "- **AvatarBlock**: Avatar with name and username text\n" +
+          "- **AvatarGroup**: Multiple avatars displayed together\n\n" +
+          "## Usage Guidelines\n" +
+          "- Use avatars to represent users, team members, or profile pictures\n" +
+          "- Always provide fallback initials when no image is available\n" +
+          "- Use consistent sizing across your application\n" +
+          "- Consider accessibility with proper alt text and contrast\n\n" +
+          "## Size Variants\n" +
+          "- **Small**: 24px - For compact spaces, lists, and secondary contexts\n" +
+          "- **Medium**: 32px - Default size for most use cases\n" +
+          "- **Large**: 48px - For prominent displays and user profiles\n" +
+          "- **Extra Large**: 64px+ - For hero sections and main user displays\n\n" +
+          "## Avatar States\n" +
+          "- **Default**: Normal display with image or initials\n" +
+          "- **Loading**: Placeholder state while image loads\n" +
+          "- **Error**: Fallback state when image fails to load\n" +
+          "- **Online**: Green indicator for active users\n" +
+          "- **Offline**: Gray indicator for inactive users\n" +
+          "- **Away**: Yellow indicator for temporarily unavailable users\n\n" +
+          "## Accessibility\n" +
+          "- Provide meaningful alt text for screen readers\n" +
+          "- Ensure sufficient contrast for initials fallback\n" +
+          "- Use semantic HTML elements when possible\n" +
+          "- Support keyboard navigation for interactive avatars\n" +
+          "- Provide text alternatives for status indicators\n\n" +
+          "## AvatarBlock Guidelines\n" +
+          "- Use for user cards, comments, and profile displays\n" +
+          "- Keep name text concise and readable\n" +
+          "- Username should be secondary information\n" +
+          "- Maintain consistent spacing between avatar and text\n" +
+          "- Use appropriate text hierarchy (name > username)\n\n" +
+          "## AvatarGroup Guidelines\n" +
+          "- Limit to 3-4 visible avatars to maintain clarity\n" +
+          "- Use \"+X\" indicator for additional users\n" +
+          "- Maintain consistent spacing between avatars\n" +
+          "- Consider hover states to show full user list\n" +
+          "- Use appropriate sizing for the context\n\n" +
+          "## Color Guidelines\n" +
+          "- Use brand colors for status indicators\n" +
+          "- Ensure initials have sufficient contrast\n" +
+          "- Use neutral colors for offline/inactive states\n" +
+          "- Consider colorblind accessibility for status colors\n\n" +
+          "## Do's and Don'ts\n" +
+          "✅ Do: Use consistent avatar sizing throughout your app\n" +
+          "✅ Do: Provide meaningful fallback initials\n" +
+          "✅ Do: Use appropriate status indicators\n" +
+          "✅ Do: Maintain proper spacing in groups\n" +
+          "✅ Do: Consider loading and error states\n" +
+          "❌ Don't: Use avatars for non-human entities\n" +
+          "❌ Don't: Mix different avatar sizes inconsistently\n" +
+          "❌ Don't: Use low contrast colors for initials\n" +
+          "❌ Don't: Overcrowd avatar groups\n" +
+          "❌ Don't: Use generic placeholder images\n\n" +
+          "## Responsive Behavior\n" +
+          "- Scale avatar sizes appropriately on mobile devices\n" +
+          "- Maintain touch targets for interactive avatars\n" +
+          "- Consider smaller groups on mobile screens\n" +
+          "- Ensure text remains readable at all sizes\n" +
+          "- Use appropriate spacing for different screen densities\n\n" +
+          "## Implementation Notes\n" +
+          "- Always handle image loading errors gracefully\n" +
+          "- Provide initials as fallback when no image is available\n" +
+          "- Use proper aspect ratios (typically square)\n" +
+          "- Consider lazy loading for performance\n" +
+          "- Implement proper caching for user images";
+      } else {
+        // Empty state when no rules are available
+        rulesContent = "# Design System Rules\n\n" +
+          "📝 No design system rules available for the selected component(s).\n\n" +
+          "**Available components:** " + detectedComponents.map(function(c) { return c.name; }).join(", ") + "\n\n" +
+          "To add design system rules:\n" +
+          "1. Create a `ComponentName.figma.rules.md` file in `src/figma/primitives/`\n" +
+          "2. Add the component detection logic in the plugin\n" +
+          "3. Rules will automatically appear here when the component is selected\n\n" +
+          "**Example files to create:**\n" +
+          "- `Text.figma.rules.md`\n" +
+          "- `Card.figma.rules.md`\n" +
+          "- `Input.figma.rules.md`\n" +
+          "- `Avatar.figma.rules.md`";
+      }
+    } else {
+      // Empty state when no components are detected
+      rulesContent = "# Design System Rules\n\n" +
+        "🔍 No components detected in the current selection.\n\n" +
+        "**To see design system rules:**\n" +
+        "1. Select a component instance (Button, Text, Card, etc.)\n" +
+        "2. Design system rules will appear here automatically\n\n" +
+        "**Available components with rules:**\n" +
+        "- Button (✅ Rules available)\n" +
+        "- Text (✅ Rules available)\n" +
+        "- Avatar (✅ Rules available)\n" +
+        "- Card (📝 Rules coming soon)\n" +
+        "- Input (📝 Rules coming soon)";
+    }
+
+    return { 
+      detectionReport: report.length ? report : "No components detected.", 
+      filledCode: rulesContent || filledBody, 
+      codeConnect: JSON.stringify(cc, null, 2) 
+    };
   }
 
   // Placeholder for future codegen path (disabled in detection phase)
@@ -316,7 +505,7 @@ if (figma && figma.editorType === "dev" && figma.mode === "codegen") {
         return [
           { title: "Detected Components", language: "PLAINTEXT", code: result.detectionReport },
           result.codeConnect ? { title: "Code Connect Mapping (draft)", language: "JSON", code: result.codeConnect } : null,
-          result.filledCode ? { title: "Filled Example", language: "TYPESCRIPT", code: result.filledCode } : null
+          result.filledCode ? { title: "Design System Rules", language: "PLAINTEXT", code: result.filledCode } : null
         ].filter(function (x) { return !!x; });
       }
       if (!MULTI_SECTION_OUTPUT || typeof result === "string") {
