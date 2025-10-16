@@ -23,7 +23,12 @@
     "figma:connect:publish": "figma connect publish",
     "figma:connect:validate": "figma connect validate",
     "figma:connect:list": "figma connect list",
-    "chromatic": "npx chromatic --project-token=chpt_830957d50b69bcc"
+    "chromatic": "npx chromatic --project-token=chpt_830957d50b69bcc",
+    "github:pr:create": "cd scripts/github; node --env-file=../../.env github-pr.mjs create ../../scripts/tokens/tokens.json; cd -;",
+    "github:pr:info": "cd scripts/github; node --env-file=../../.env github-pr.mjs info; cd -;",
+    "github:pr:list": "cd scripts/github; node --env-file=../../.env github-pr.mjs list; cd -;",
+    "github:pr:test": "cd scripts/github; node --env-file=../../.env test-pr.mjs; cd -;",
+    "figma:pr": "cd scripts/github; node --env-file=../../.env figma-pr.mjs; cd -;"
   },
   "prettier": {
     "plugins": [
@@ -62,6 +67,8 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.4",
+    "@octokit/rest": "^20.0.2",
+    "simple-git": "^3.20.0"
   }
 }

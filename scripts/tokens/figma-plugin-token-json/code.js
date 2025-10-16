@@ -73,6 +73,32 @@ async function exportToJSON() {
 
   const effects = await getEffects();
 
+  // Handle messages from UI
+  figma.ui.onmessage = async (msg) => {
+    if (msg.type === 'create-pull-request') {
+      try {
+        // Get the tokens data
+        const tokensData = msg.data.variables;
+        const tokensJson = JSON.stringify(tokensData, null, 2);
+        
+        // Copy to clipboard as fallback
+        figma.ui.postMessage({
+          type: 'copy-to-clipboard',
+          data: tokensJson
+        });
+        
+        // Show success message with instructions
+        figma.notify('✅ Tokens copied to clipboard! Paste into scripts/tokens/tokens.json and run "npm run github:pr:create"', { timeout: 8000 });
+        
+        // Close plugin
+        figma.closePlugin('Tokens copied to clipboard! Paste into tokens.json and run npm run github:pr:create');
+        
+      } catch (error) {
+        figma.notify(`❌ Error processing tokens: ${error.message}`, { timeout: 5000 });
+      }
+    }
+  };
+
   figma.showUI(
     [
       `<style>
@@ -183,6 +209,36 @@ async function exportToJSON() {
         .copy-btn:active {
           background: var(--figma-color-bg-pressed);
         }
+        .pr-btn {
+          padding: 8px 16px;
+          border: none;
+          border-radius: 6px;
+          font-size: 12px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          font-family: inherit;
+          background: var(--figma-color-bg-brand, #007AFF);
+          color: var(--figma-color-text-onbrand, white);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .pr-btn:hover {
+          background: var(--figma-color-bg-brand-hover, #0056CC);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        .pr-btn:active {
+          background: var(--figma-color-bg-brand-pressed, #004499);
+          transform: translateY(0);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .pr-btn:disabled {
+          background: var(--figma-color-bg-disabled, #ccc);
+          color: var(--figma-color-text-disabled, #666);
+          cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
+        }
       </style>`,
       `<div class="tab-container">
         <button class="tab active" onclick="showTab('variables')">Variables JSON</button>
@@ -196,6 +252,7 @@ async function exportToJSON() {
       </div>
     <div class="footer">
       <button class="copy-btn" onclick="copyToClipboard()">Copy Current Tab</button>
+      <button class="pr-btn" onclick="createPullRequest()">Create Pull Request</button>
     </div>
       <script>
         function showTab(tabName) {
@@ -240,6 +297,62 @@ async function exportToJSON() {
             btn.style.background = '#007AFF';
           }, 1500);
         }
+        
+        function createPullRequest() {
+          const prBtn = document.querySelector('.pr-btn');
+          const originalText = prBtn.textContent;
+          
+          // Disable button and show loading state
+          prBtn.disabled = true;
+          prBtn.textContent = 'Processing...';
+          
+          // Get the current tokens data
+          const variablesData = document.getElementById('variables-code').textContent;
+          const effectsData = document.getElementById('effects-code').textContent;
+          
+          try {
+            // Send message to parent (Figma plugin) to trigger PR creation
+            parent.postMessage({
+              pluginMessage: {
+                type: 'create-pull-request',
+                data: {
+                  variables: JSON.parse(variablesData),
+                  effects: effectsData,
+                  timestamp: new Date().toISOString()
+                }
+              }
+            }, '*');
+            
+            // Update button to show success
+            prBtn.textContent = 'Copied to Clipboard!';
+            prBtn.style.background = '#28a745';
+            
+          } catch (error) {
+            // Show error state
+            prBtn.textContent = 'Error!';
+            prBtn.style.background = '#dc3545';
+            console.error('Error creating PR:', error);
+          }
+          
+          // Reset button after a delay
+          setTimeout(() => {
+            prBtn.disabled = false;
+            prBtn.textContent = originalText;
+            prBtn.style.background = '#007AFF';
+          }, 3000);
+        }
+        
+        // Listen for messages from the plugin
+        window.addEventListener('message', (event) => {
+          if (event.data.pluginMessage && event.data.pluginMessage.type === 'copy-to-clipboard') {
+            // Copy the tokens data to clipboard
+            navigator.clipboard.writeText(event.data.pluginMessage.data).then(() => {
+              console.log('Tokens copied to clipboard');
+            }).catch(err => {
+              console.error('Failed to copy to clipboard:', err);
+            });
+          }
+        });
         
       </script>`,
     ].join("\n"),
