@@ -162,7 +162,7 @@ figma.connect(StatsCard, "<FIGMA_CARDS_STATS_CARD>", {
 figma.connect(TestimonialCard, "<FIGMA_CARDS_TESTIMONIAL_CARD>", {
   props: {
     headingProps: figma.nestedProps("Text Heading", {
-      heading: figma.string("Text"),
+      heading: figma.textContent("Text Heading"),
     }),
     avatarBlockProps: figma.nestedProps("Avatar Block", {
       name: figma.string("Title"),

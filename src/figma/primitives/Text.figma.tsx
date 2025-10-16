@@ -43,7 +43,7 @@ figma.connect(TextSubtitle, "<FIGMA_TEXT_TEXT_SUBTITLE>", {
 });
 figma.connect(TextHeading, "<FIGMA_TEXT_TEXT_HEADING>", {
   props: {
-    children: figma.textContent("Text"),
+    children: figma.textContent("Text Heading"),
     color: figma.enum("color", {
       default: "default",
       subtle: "subtle",
