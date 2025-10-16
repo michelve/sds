@@ -75,12 +75,177 @@ async function exportToJSON() {
 
   figma.showUI(
     [
-      "<style>body { margin: 0 } textarea { width: 100%; height: 50vh; overlow-y: auto; }</style>",
-      `<textarea>${JSON.stringify(object, null, 2)}</textarea><textarea>${effects}</textarea>`,
+      `<style>
+        body { 
+          margin: 0; 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: var(--figma-color-bg);
+          color: var(--figma-color-text);
+        }
+        .tab-container {
+          display: flex;
+          border-bottom: 1px solid var(--figma-color-border);
+          background: var(--figma-color-bg-secondary);
+        }
+        .tab {
+          padding: 8px 16px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--figma-color-text-secondary);
+          border-bottom: 2px solid transparent;
+          transition: all 0.15s ease;
+          font-family: inherit;
+        }
+        .tab:hover {
+          color: var(--figma-color-text);
+          background: var(--figma-color-bg-hover);
+        }
+        .tab.active {
+          color: var(--figma-color-text);
+          border-bottom-color: var(--figma-color-border-brand);
+        }
+        .tab-content {
+          display: none;
+          height: calc(100vh - 120px);
+          position: relative;
+          margin-bottom: 60px;
+        }
+        .tab-content.active {
+          display: block;
+        }
+        .code-area {
+            width: 94%;
+            height: 96%;
+            padding: 16px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            background: var(--figma-color-bg-tertiary);
+            color: var(--figma-color-text);
+            overflow-y: visible;
+            overflow-x: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid var(--figma-color-border);
+            border-radius: 6px;
+            margin: 8px;
+            outline: none;
+            resize: none;
+        }
+        .code-area::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        .code-area::-webkit-scrollbar-track {
+          background: var(--figma-color-bg-secondary);
+        }
+        .code-area::-webkit-scrollbar-thumb {
+          background: var(--figma-color-border);
+          border-radius: 3px;
+        }
+        .code-area::-webkit-scrollbar-thumb:hover {
+          background: var(--figma-color-border-strong);
+        }
+        .footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: var(--figma-color-bg-secondary);
+          border-top: 1px solid var(--figma-color-border);
+          padding: 12px 16px;
+          display: flex;
+          gap: 12px;
+          z-index: 1000;
+          box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+          height: 60px;
+          box-sizing: border-box;
+        }
+        .copy-btn {
+          padding: 8px 16px;
+          border: 1px solid var(--figma-color-border);
+          border-radius: 6px;
+          font-size: 12px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          font-family: inherit;
+          background: var(--figma-color-bg);
+          color: var(--figma-color-text);
+        }
+        .copy-btn:hover {
+          background: var(--figma-color-bg-hover);
+          border-color: var(--figma-color-border-strong);
+        }
+        .copy-btn:active {
+          background: var(--figma-color-bg-pressed);
+        }
+      </style>`,
+      `<div class="tab-container">
+        <button class="tab active" onclick="showTab('variables')">Variables JSON</button>
+        <button class="tab" onclick="showTab('effects')">Effects JSON</button>
+      </div>
+      <div class="tab-content active" id="variables">
+        <div class="code-area" id="variables-code">${JSON.stringify(object, null, 2)}</div>
+      </div>
+      <div class="tab-content" id="effects">
+        <div class="code-area" id="effects-code">${effects}</div>
+      </div>
+    <div class="footer">
+      <button class="copy-btn" onclick="copyToClipboard()">Copy Current Tab</button>
+    </div>
+      <script>
+        function showTab(tabName) {
+          // Update current tab
+          currentTab = tabName;
+          
+          // Hide all tab contents
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          // Remove active class from all tabs
+          document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+          });
+          // Show selected tab content
+          document.getElementById(tabName).classList.add('active');
+          // Add active class to clicked tab
+          event.target.classList.add('active');
+        }
+        
+        let currentTab = 'variables';
+        
+        function copyToClipboard() {
+          const codeArea = document.getElementById(currentTab + '-code');
+          const content = codeArea.textContent;
+          
+          // Create a temporary textarea to copy content
+          const tempTextarea = document.createElement('textarea');
+          tempTextarea.value = content;
+          document.body.appendChild(tempTextarea);
+          tempTextarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempTextarea);
+          
+          // Visual feedback
+          const btn = event.target;
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.style.background = '#28a745';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '#007AFF';
+          }, 1500);
+        }
+        
+      </script>`,
     ].join("\n"),
     {
-      width: 700,
-      height: 700,
+      width: 800,
+      height: 600,
     },
   );
 }
