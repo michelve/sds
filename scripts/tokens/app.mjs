@@ -7,7 +7,7 @@ import {
 
 const FILE_KEY = process.env.FIGMA_FILE_KEY;
 const SKIP_REST_API = process.argv.includes("--skip-rest-api");
-const WRITE_DIR = "../../src";
+const WRITE_DIR = "../../packages/ui-react/src";
 
 const CONVERT_TO_REM = true;
 // Extension namespace for the w3c token file
