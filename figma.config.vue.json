@@ -1,5 +1,6 @@
 {
   "codeConnect": {
+    "label": "Vue",
     "include": ["packages/ui-vue/src/**/*"],
     "exclude": ["**/*.spec.js", "**/*.spec.ts", "**/test/**"],
     "parser": "html",
