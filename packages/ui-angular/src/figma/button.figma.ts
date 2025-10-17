@@ -68,10 +68,11 @@ figma.connect(
   "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=11-11508",
   {
     props: {
-      label: figma.string("Label"),
       icon: figma.instance("Icon"),
       size: figma.enum("Size", {
         Small: "small",
+        Medium: "medium",
+        Large: "large",
       }),
       isDisabled: figma.enum("State", {
         Disabled: true,
@@ -82,12 +83,12 @@ figma.connect(
         Subtle: "subtle",
       }),
     },
-    example: ({ label, icon, isDisabled, size, variant }) => 
+    example: ({ icon, isDisabled, size, variant }) => 
       html`<sds-icon-button 
         variant="${variant}"
         size="${size}"
         [disabled]="${isDisabled}"
-        aria-label="${label}"
+        aria-label="Icon button"
       >
         ${icon}
       </sds-icon-button>`
