@@ -1,25 +1,76 @@
 {
-  "codeConnect": {
-    "include": ["packages/ui-react/src/**/*"],
-    "exclude": [],
-    "parser": "react",
-    "importPaths": {
-      "compositions/**/*": "compositions",
-      "icons/*": "icons", 
-      "images/*": "images",
-      "layout/**/*": "layout",
-      "primitives/**/*": "primitives"
+  "codeConnect": [
+    {
+      "label": "React",
+      "include": ["packages/ui-react/src/**/*"],
+      "exclude": [],
+      "parser": "react",
+      "importPaths": {
+        "compositions/**/*": "compositions",
+        "icons/*": "icons", 
+        "images/*": "images",
+        "layout/**/*": "layout",
+        "primitives/**/*": "primitives"
+      },
+      "paths": {
+        "compositions": ["packages/ui-react/src/compositions"],
+        "hooks": ["packages/ui-react/src/hooks"],
+        "icons": ["packages/ui-react/src/icons"],
+        "images": ["packages/ui-react/src/images"],
+        "layout": ["packages/ui-react/src/layout"],
+        "primitives": ["packages/ui-react/src/primitives"],
+        "providers": ["packages/ui-react/src/providers"],
+        "utils": ["packages/ui-react/src/utils"]
+      }
     },
-    "paths": {
-      "compositions": ["packages/ui-react/src/compositions"],
-      "hooks": ["packages/ui-react/src/hooks"],
-      "icons": ["packages/ui-react/src/icons"],
-      "images": ["packages/ui-react/src/images"],
-      "layout": ["packages/ui-react/src/layout"],
-      "primitives": ["packages/ui-react/src/primitives"],
-      "providers": ["packages/ui-react/src/providers"],
-      "utils": ["packages/ui-react/src/utils"]
+    {
+      "label": "Angular",
+      "include": ["packages/ui-angular/src/**/*"],
+      "exclude": ["**/*.spec.ts", "**/test/**"],
+      "parser": "typescript",
+      "importPaths": {
+        "@sds/components": "components",
+        "@sds/directives": "directives",
+        "@sds/services": "services"
+      },
+      "paths": {
+        "components": ["packages/ui-angular/src/lib/components"],
+        "directives": ["packages/ui-angular/src/lib/directives"],
+        "services": ["packages/ui-angular/src/lib/services"]
+      }
     },
+    {
+      "label": "Vue",
+      "include": ["packages/ui-vue/src/**/*"],
+      "exclude": ["**/*.spec.js", "**/*.spec.ts", "**/test/**"],
+      "parser": "vue",
+      "importPaths": {
+        "@sds/components": "components",
+        "@sds/composables": "composables",
+        "@sds/utils": "utils"
+      },
+      "paths": {
+        "components": ["packages/ui-vue/src/components"],
+        "composables": ["packages/ui-vue/src/composables"],
+        "utils": ["packages/ui-vue/src/utils"]
+      }
+    },
+    {
+      "label": "Web Components",
+      "include": ["packages/ui-web-components/src/**/*"],
+      "exclude": ["**/*.spec.js", "**/*.spec.ts", "**/test/**"],
+      "parser": "typescript",
+      "importPaths": {
+        "@sds/elements": "elements",
+        "@sds/mixins": "mixins"
+      },
+      "paths": {
+        "elements": ["packages/ui-web-components/src/elements"],
+        "mixins": ["packages/ui-web-components/src/mixins"]
+      }
+    }
+  ],
+  "shared": {
     "documentUrlSubstitutions": {
       "<FIGMA_ICONS_BASE>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho",
       "<FIGMA_ACCORDION_ACCORDION_ITEM>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=7753-4634",
