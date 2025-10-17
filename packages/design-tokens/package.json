@@ -15,7 +15,13 @@
     "build:js": "tsc",
     "dev": "npm run build && npm run watch",
     "watch": "npm run tokens:build && npm run build:js -- --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "bootstrap:validate": "node src/bootstrap/validate-mapping.js",
+    "bootstrap:analyze": "node -e \"import('./src/bootstrap/token-analyzer.js').then(m => { const analyzer = new m.TokenAnalyzer(); analyzer.loadTokens().then(() => console.log(JSON.stringify(analyzer.generateReport(), null, 2))); })\"",
+    "bootstrap:build": "node src/bootstrap/build-bootstrap.js",
+    "bootstrap:build-only": "style-dictionary build --config style-dictionary.config.js --platform bootstrap_scss,bootstrap_css",
+    "bootstrap:watch": "npm run bootstrap:build && chokidar 'tokens/**/*.json' 'src/bootstrap/**/*.js' -c 'npm run bootstrap:build'",
+    "build:all": "npm run build && npm run bootstrap:build"
   },
   "devDependencies": {
     "style-dictionary": "^4.0.0",

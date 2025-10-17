@@ -123,6 +123,14 @@ async function initialize() {
     [...themeCSS, ...stylesCSS].join("\n"),
   );
 
+  // React App Theme CSS Output (single source for React app)
+  const reactThemeDir = "../ui-react/src";
+  fs.writeFileSync(
+    `${reactThemeDir}/theme.css`,
+    [...themeCSS, ...stylesCSS].join("\n"),
+  );
+  console.log(`✅ Generated React app theme.css`);
+
   // SCSS Output (convert CSS variables to SCSS variables)
   const scssContent = [...themeCSS, ...stylesCSS]
     .join("\n")
@@ -161,6 +169,12 @@ async function initialize() {
   const androidXml = generateAndroidXml(processed);
   fs.writeFileSync(`${WRITE_DIR}/android/colors.xml`, androidXml);
 
+  console.log("✅ Generated all token outputs:");
+  console.log("   • packages/design-tokens/dist/css/tokens.css");
+  console.log("   • packages/ui-react/src/theme.css (React app)");
+  console.log("   • packages/design-tokens/dist/scss/tokens.scss");
+  console.log("   • packages/design-tokens/dist/js/tokens.js");
+  console.log("   • packages/design-tokens/dist/json/tokens.json");
   console.log("Done!");
 }
 

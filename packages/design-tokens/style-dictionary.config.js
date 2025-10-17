@@ -1,5 +1,8 @@
 import StyleDictionary from 'style-dictionary';
 
+// Import Bootstrap Style Dictionary extension
+import './src/bootstrap/bootstrap.style-dictionary.js';
+
 // Custom transforms to match existing SDS token structure exactly
 StyleDictionary.registerTransform({
   name: 'name/cti/sds',
@@ -182,6 +185,53 @@ export default {
         {
           destination: 'tokens.json',
           format: 'json/flat',
+        }
+      ]
+    },
+    // Bootstrap integration platforms
+    bootstrap_scss: {
+      transformGroup: 'scss',
+      prefix: 'bootstrap',
+      buildPath: 'dist/bootstrap/',
+      transforms: [
+        'attribute/cti',
+        'name/bootstrap/scss-variable',
+        'value/bootstrap/semantic',
+        'time/seconds',
+        'content/icon',
+        'size/rem',
+        'color/css'
+      ],
+      files: [
+        {
+          destination: '_variables.scss',
+          format: 'scss/bootstrap-variables',
+          options: {
+            showFileHeader: false
+          }
+        }
+      ]
+    },
+    bootstrap_css: {
+      transformGroup: 'css',
+      prefix: 'bs',
+      buildPath: 'dist/bootstrap/',
+      transforms: [
+        'attribute/cti',
+        'name/cti/kebab',
+        'value/bootstrap/semantic',
+        'time/seconds',
+        'content/icon',
+        'size/rem',
+        'color/css'
+      ],
+      files: [
+        {
+          destination: 'bootstrap-tokens.css',
+          format: 'css/bootstrap-custom-properties',
+          options: {
+            showFileHeader: false
+          }
         }
       ]
     }

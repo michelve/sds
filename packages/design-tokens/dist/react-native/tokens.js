@@ -17,7 +17,7 @@ export const tokens = {
   "sdsColorBrand500": "#757575",
   "sdsColorBrand600": "#3e3d3d",
   "sdsColorBrand700": "#383838",
-  "sdsColorBrand800": "#2b2b2e",
+  "sdsColorBrand800": "#046d04",
   "sdsColorBrand900": "#1e1e1e",
   "sdsColorBrandB100": "#f5f5f5",
   "sdsColorBrandB1000": "#111111",
