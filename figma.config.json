@@ -1,7 +1,7 @@
 {
   "codeConnect": {
     "include": ["packages/ui-react/src/**/*"],
-    "exclude": ["packages/ui-react/src/figma/icons/*"],
+    "exclude": [],
     "parser": "react",
     "importPaths": {
       "compositions/**/*": "compositions",
