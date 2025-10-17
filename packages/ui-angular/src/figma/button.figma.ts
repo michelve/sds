@@ -1,4 +1,4 @@
-import figma from "@figma/code-connect";
+import figma, { html } from "@figma/code-connect/html";
 
 const sharedProps = {
   label: figma.string("Label"),
@@ -29,13 +29,13 @@ figma.connect(
         Subtle: "subtle",
       }),
     },
-    example: ({ label, iconEnd, iconStart, isDisabled, size, variant }) => `
-      <sds-button 
+    example: ({ label, iconEnd, iconStart, isDisabled, size, variant }) => 
+      html`<sds-button 
         variant="${variant}"
         size="${size}"
-        ${isDisabled ? '[disabled]="true"' : ''}
-        ${iconStart ? `iconStart="${iconStart}"` : ''}
-        ${iconEnd ? `iconEnd="${iconEnd}"` : ''}
+        [disabled]="${isDisabled}"
+        iconStart="${iconStart}"
+        iconEnd="${iconEnd}"
       >
         ${label}
       </sds-button>`
@@ -51,13 +51,13 @@ figma.connect(
         Subtle: "danger-subtle",
       }),
     },
-    example: ({ label, iconEnd, iconStart, isDisabled, size, variant }) => `
-      <sds-button 
+    example: ({ label, iconEnd, iconStart, isDisabled, size, variant }) => 
+      html`<sds-button 
         variant="${variant}"
         size="${size}"
-        ${isDisabled ? '[disabled]="true"' : ''}
-        ${iconStart ? `iconStart="${iconStart}"` : ''}
-        ${iconEnd ? `iconEnd="${iconEnd}"` : ''}
+        [disabled]="${isDisabled}"
+        iconStart="${iconStart}"
+        iconEnd="${iconEnd}"
       >
         ${label}
       </sds-button>`
@@ -76,8 +76,8 @@ figma.connect(
       }),
       children: figma.children(["Button"]),
     },
-    example: ({ children, align }) => `
-      <sds-button-group align="${align}">
+    example: ({ children, align }) => 
+      html`<sds-button-group align="${align}">
         ${children}
       </sds-button-group>`
   }
