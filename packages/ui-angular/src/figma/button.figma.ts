@@ -95,3 +95,22 @@ figma.connect(
   }
 );
 
+figma.connect(
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=2072-9432",
+  {
+    props: {
+      align: figma.enum("Align", {
+        Center: "center",
+        End: "end",
+        Justify: "justify",
+        Stack: "stack",
+      }),
+      children: figma.children(["Button"]),
+    },
+    example: ({ children, align }) => 
+      html`<sds-button-group align="${align}">
+        ${children}
+      </sds-button-group>`
+  }
+);
+

@@ -1,14 +1,14 @@
 import figma from "@figma/code-connect";
 import { Accordion, AccordionItem } from "primitives";
 
-figma.connect(Accordion, "<FIGMA_ACCORDION_ACCORDION>", {
+figma.connect(Accordion, "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=7753-4779", {
   props: {
     children: figma.children("Accordion Item"),
   },
   example: ({ children }) => <Accordion>{children}</Accordion>,
 });
 
-figma.connect(AccordionItem, "<FIGMA_ACCORDION_ACCORDION_ITEM>", {
+figma.connect(AccordionItem, "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=7753-4634", {
   props: {
     dataSelected: figma.enum("State", {
       Open: "true",
@@ -18,3 +18,4 @@ figma.connect(AccordionItem, "<FIGMA_ACCORDION_ACCORDION_ITEM>", {
   },
   example: ({ dataSelected, ...props }) => <AccordionItem {...props} />,
 });
+
