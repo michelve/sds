@@ -19,7 +19,7 @@ const sharedProps = {
 };
 
 figma.connect(
-  "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=9762:426",
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=4185-3778",
   {
     props: {
       ...sharedProps,
@@ -43,7 +43,7 @@ figma.connect(
 );
 
 figma.connect(
-  "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=185-852",
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=185-852",
   {
     props: {
       ...sharedProps,
@@ -65,20 +65,32 @@ figma.connect(
 );
 
 figma.connect(
-  "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=2072-9432",
+  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=11-11508",
   {
     props: {
-      align: figma.enum("Align", {
-        Center: "center",
-        End: "end",
-        Justify: "justify",
-        Stack: "stack",
+      label: figma.string("Label"),
+      icon: figma.instance("Icon"),
+      size: figma.enum("Size", {
+        Small: "small",
       }),
-      children: figma.children(["Button"]),
+      isDisabled: figma.enum("State", {
+        Disabled: true,
+      }),
+      variant: figma.enum("Variant", {
+        Primary: "primary",
+        Neutral: "neutral",
+        Subtle: "subtle",
+      }),
     },
-    example: ({ children, align }) => 
-      html`<sds-button-group align="${align}">
-        ${children}
-      </sds-button-group>`
+    example: ({ label, icon, isDisabled, size, variant }) => 
+      html`<sds-icon-button 
+        variant="${variant}"
+        size="${size}"
+        [disabled]="${isDisabled}"
+        aria-label="${label}"
+      >
+        ${icon}
+      </sds-icon-button>`
   }
 );
+
