@@ -20,7 +20,6 @@ const sharedProps = {
 };
 
 figma.connect(Button, "<FIGMA_BUTTONS_BUTTON>", {
-  description: "Primary action button for forms, navigation, and user interactions",
   props: {
     ...sharedProps,
     variant: figma.enum("Variant", {
@@ -38,7 +37,6 @@ figma.connect(Button, "<FIGMA_BUTTONS_BUTTON>", {
   ),
 });
 figma.connect(Button, "<FIGMA_BUTTONS_BUTTON_DANGER>", {
-  description: "Destructive action button for delete, remove, or irreversible actions",
   props: {
     ...sharedProps,
     variant: figma.enum("Variant", {
@@ -55,7 +53,6 @@ figma.connect(Button, "<FIGMA_BUTTONS_BUTTON_DANGER>", {
 });
 
 figma.connect(ButtonGroup, "<FIGMA_BUTTONS_BUTTON_GROUP>", {
-  description: "Container for grouping related buttons with consistent spacing",
   props: {
     align: figma.enum("Align", {
       Center: "center",

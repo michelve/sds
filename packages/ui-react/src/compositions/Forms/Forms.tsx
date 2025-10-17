@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { Form, type FormProps, TextContentTitle } from "primitives";
-import { ReactNode } from "react";
 import "./forms.css";
 
 export type FormBoxProps = FormProps;
@@ -10,8 +9,8 @@ export function FormBox({ className, ...props }: FormBoxProps) {
 }
 
 export type FormWithTitleProps = FormProps & {
-  title: ReactNode;
-  subtitle?: ReactNode;
+  title: string;
+  subtitle?: string;
   align?: "start" | "center";
   className?: string;
 };
