@@ -1,24 +1,24 @@
 {
   "codeConnect": {
-    "include": ["src/ui/**/*", "src/figma/**/*"],
-    "exclude": ["src/figma/icons/*"],
+    "include": ["packages/ui-react/src/**/*"],
+    "exclude": ["packages/ui-react/src/figma/icons/*"],
     "parser": "react",
     "importPaths": {
-      "ui/compositions/**/*": "compositions",
-      "ui/icons/*": "icons",
-      "ui/images/*": "images",
-      "ui/layout/**/*": "layout",
-      "ui/primitives/**/*": "primitives"
+      "compositions/**/*": "compositions",
+      "icons/*": "icons", 
+      "images/*": "images",
+      "layout/**/*": "layout",
+      "primitives/**/*": "primitives"
     },
     "paths": {
-      "compositions": ["src/ui/compositions"],
-      "hooks": ["src/ui/hooks"],
-      "icons": ["src/ui/icons"],
-      "images": ["src/ui/images"],
-      "layout": ["src/ui/layout"],
-      "primitives": ["src/ui/primitives"],
-      "providers": ["src/ui/providers"],
-      "utils": ["src/ui/utils"]
+      "compositions": ["packages/ui-react/src/compositions"],
+      "hooks": ["packages/ui-react/src/hooks"],
+      "icons": ["packages/ui-react/src/icons"],
+      "images": ["packages/ui-react/src/images"],
+      "layout": ["packages/ui-react/src/layout"],
+      "primitives": ["packages/ui-react/src/primitives"],
+      "providers": ["packages/ui-react/src/providers"],
+      "utils": ["packages/ui-react/src/utils"]
     },
     "documentUrlSubstitutions": {
       "<FIGMA_ICONS_BASE>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho",
