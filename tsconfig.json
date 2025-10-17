@@ -15,16 +15,15 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./packages/ui-react/src",
     "paths": {
-      "data": ["./data"],
-      "compositions": ["./compositions"],
-      "hooks": ["./hooks"],
-      "icons": ["./icons"],
-      "images": ["./images"],
-      "layout": ["./layout"],
-      "primitives": ["./primitives"],
-      "utils": ["./utils"]
+      "data": ["./packages/ui-react/src/data"],
+      "compositions": ["./packages/ui-react/src/compositions"],
+      "hooks": ["./packages/ui-react/src/hooks"],
+      "icons": ["./packages/ui-react/src/icons"],
+      "images": ["./packages/ui-react/src/images"],
+      "layout": ["./packages/ui-react/src/layout"],
+      "primitives": ["./packages/ui-react/src/primitives"],
+      "utils": ["./packages/ui-react/src/utils"]
     }
   },
   "include": ["packages/ui-react/src", "scripts"]

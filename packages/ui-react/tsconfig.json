@@ -17,16 +17,15 @@
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
     "outDir": "dist",
-    "baseUrl": "./src",
     "paths": {
-      "data": ["./data"],
-      "compositions": ["./compositions"],
-      "hooks": ["./hooks"],
-      "icons": ["./icons"],
-      "images": ["./images"],
-      "layout": ["./layout"],
-      "primitives": ["./primitives"],
-      "utils": ["./utils"]
+      "data": ["./src/data"],
+      "compositions": ["./src/compositions"],
+      "hooks": ["./src/hooks"],
+      "icons": ["./src/icons"],
+      "images": ["./src/images"],
+      "layout": ["./src/layout"],
+      "primitives": ["./src/primitives"],
+      "utils": ["./src/utils"]
     }
   },
     "include": ["src", "src/types"],
