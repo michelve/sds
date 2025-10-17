@@ -19,7 +19,7 @@ const sharedProps = {
 };
 
 figma.connect(
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=4185-3778",
+  "<FIGMA_BUTTONS_BUTTON>",
   {
     props: {
       ...sharedProps,
@@ -43,7 +43,7 @@ figma.connect(
 );
 
 figma.connect(
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=185-852",
+  "<FIGMA_BUTTONS_BUTTON_DANGER>",
   {
     props: {
       ...sharedProps,
@@ -65,7 +65,7 @@ figma.connect(
 );
 
 figma.connect(
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=11-11508",
+  "<FIGMA_BUTTONS_ICON_BUTTON>",
   {
     props: {
       icon: figma.instance("Icon"),
@@ -96,7 +96,7 @@ figma.connect(
 );
 
 figma.connect(
-  "https://www.figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=2072-9432",
+  "<FIGMA_BUTTONS_BUTTON_GROUP>",
   {
     props: {
       align: figma.enum("Align", {

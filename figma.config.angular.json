@@ -1,0 +1,23 @@
+{
+  "codeConnect": {
+    "include": ["packages/ui-angular/src/**/*"],
+    "exclude": ["**/*.spec.ts", "**/test/**"],
+    "parser": "html",
+    "importPaths": {
+      "@sds/components": "components",
+      "@sds/directives": "directives", 
+      "@sds/services": "services"
+    },
+    "paths": {
+      "components": ["packages/ui-angular/src/lib/components"],
+      "directives": ["packages/ui-angular/src/lib/directives"],
+      "services": ["packages/ui-angular/src/lib/services"]
+    },
+    "documentUrlSubstitutions": {
+      "<FIGMA_BUTTONS_BUTTON>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=9762:426",
+      "<FIGMA_BUTTONS_BUTTON_DANGER>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=185-852",
+      "<FIGMA_BUTTONS_BUTTON_GROUP>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=2072-9432",
+      "<FIGMA_BUTTONS_ICON_BUTTON>": "https://figma.com/design/QkCVMrKpIW8zdiI05xNLho?node-id=11-11508"
+    }
+  }
+}
