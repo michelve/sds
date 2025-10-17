@@ -1,0 +1,24 @@
+{
+  "name": "@sds/design-tokens",
+  "version": "1.2.1",
+  "type": "module",
+  "description": "Design tokens for the SDS Design System - multi-platform output (CSS, JSON, JS, SCSS)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "npm run tokens:build && npm run build:js",
+    "tokens:build": "node --env-file=../../.env app.mjs --skip-rest-api",
+    "tokens:fetch": "node --env-file=../../.env app.mjs",
+    "build:js": "tsc",
+    "dev": "npm run build && npm run watch",
+    "watch": "npm run tokens:build && npm run build:js -- --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4.0.0",
+    "typescript": "^5.0.2"
+  }
+}

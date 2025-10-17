@@ -1,0 +1,58 @@
+{
+  "name": "SDS Code Generator",
+  "id": "sds-code-generator",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["dev","figma", "dev"],
+  "capabilities": ["codegen", "inspect", "vscode"],
+  "codegenLanguages": [
+    {
+      "label": "React",
+      "value": "react"
+    },
+    {
+      "label": "React Native",
+      "value": "react-native"
+    }
+  ],
+  "enableProposedApi": true,
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://github.com",
+      "https://api.github.com",
+      "https://figma.com",
+      "https://api.figma.com",
+      "https://*.figma.com"
+    ],
+    "devAllowedDomains": [
+      "http://localhost",
+      "https://localhost"
+    ],
+    "reasoning": "Access to GitHub API for component source code retrieval, Figma API for design token synchronization, and Code Connect integration. Localhost access needed for development and testing."
+  },
+  "parameters": [
+    {
+      "name": "Component Type",
+      "key": "component-type",
+      "optional": true,
+      "allowFreeform": false
+    },
+    {
+      "name": "Include Variables",
+      "key": "include-variables", 
+      "optional": true,
+      "allowFreeform": false
+    },
+    {
+      "name": "Code Style",
+      "key": "code-style",
+      "optional": true,
+      "allowFreeform": false
+    }
+  ],
+  "parameterOnly": false,
+  "permissions": [
+    "currentuser"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@sds/ui-react",
+  "version": "1.2.1",
+  "type": "module",
+  "description": "React component library for the SDS Design System",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sds/design-tokens": "*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-aria-components": "^1.10.1",
+    "react-router-dom": "^7.9.4",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@react-types/shared": "^3.23.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^6.3.5"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  }
+}
