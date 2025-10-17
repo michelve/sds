@@ -27,7 +27,7 @@
       "label": "Angular",
       "include": ["packages/ui-angular/src/**/*"],
       "exclude": ["**/*.spec.ts", "**/test/**"],
-      "parser": "typescript",
+      "parser": "html",
       "importPaths": {
         "@sds/components": "components",
         "@sds/directives": "directives",

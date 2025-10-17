@@ -1,5 +1,8 @@
-/* Import shared design tokens */
-@import "@sds/design-tokens/css/tokens.css";
+/* 
+ * Design tokens should be imported globally in your application.
+ * Add this to your app's styles:
+ * @import "@sds/design-tokens/css/tokens.css";
+ */
 
 .button {
   --border-radius: var(--sds-size-radius-200);

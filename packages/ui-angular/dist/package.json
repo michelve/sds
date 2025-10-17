@@ -8,26 +8,8 @@
     "dist/**/*",
     "src/**/*"
   ],
-  "scripts": {
-    "build": "ng-packagr -p ng-package.json",
-    "build:watch": "ng-packagr -p ng-package.json --watch",
-    "lint": "eslint src/**/*.ts",
-    "test": "jest",
-    "test:watch": "jest --watch"
-  },
   "dependencies": {
-  },
-  "devDependencies": {
-    "@angular/cli": "^17.0.0",
-    "@angular/compiler": "^17.0.0",
-    "@angular/compiler-cli": "^17.0.0",
-    "@types/node": "^20.0.0",
-    "ng-packagr": "^17.0.0",
-    "typescript": "^5.0.2",
-    "eslint": "^8.45.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "jest": "^29.0.0"
+    "tslib": "^2.3.0"
   },
   "peerDependencies": {
     "@sds/design-tokens": "*",
@@ -45,5 +27,19 @@
     "design-system",
     "sds"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "module": "fesm2022/sds-ui-angular.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/sds-ui-angular.mjs",
+      "esm": "./esm2022/sds-ui-angular.mjs",
+      "default": "./fesm2022/sds-ui-angular.mjs"
+    }
+  },
+  "sideEffects": false
 }
